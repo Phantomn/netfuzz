@@ -2,10 +2,12 @@ from boofuzz import Session, Target, s_initialize, s_string, s_static, s_get
 from protocols.strategy import Strategy
 from utils.log import Logger
 
+
 class FTP(Strategy):
     def __init__(self, addr):
         self.logger = Logger.getLogger()
         self.addr = addr
+
     def fuzz(self):
         self.logger.info("Initializing FTP fuzzing session")
         session = Session(target=Target(connection=(self.addr, 21)))

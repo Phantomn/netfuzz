@@ -17,11 +17,12 @@ text = {
 
 # Message type prefixes with colors
 _msgtype_prefixes = {
-    'debug': [text['bold_red'], 'DEBUG'],
-    'info': [text['bold_green'], '*'],
-    'warning': [text['bold_yellow'], '!'],
-    'error': [text['on_red'], 'ERROR']
+    "debug": [text["bold_red"], "DEBUG"],
+    "info": [text["bold_green"], "*"],
+    "warning": [text["bold_yellow"], "!"],
+    "error": [text["on_red"], "ERROR"],
 }
+
 
 class ConsoleFormatter(logging.Formatter):
     def format(self, record):
@@ -29,7 +30,8 @@ class ConsoleFormatter(logging.Formatter):
         prefix, symbol = _msgtype_prefixes.get(record.levelname.lower(), ["", ""])
         message = f"{WHITE}[{prefix}{symbol}{WHITE}{RESET}] {WHITE}{record.getMessage()}{RESET}"
         return message
-    
+
+
 class FileFormatter(logging.Formatter):
     DATE_FORMAT = "%Y%m%d %H:%M:%S"
 
@@ -37,7 +39,8 @@ class FileFormatter(logging.Formatter):
         date = self.formatTime(record, self.DATE_FORMAT)
         message = f"[{date}] {record.getMessage()}"
         return message
-    
+
+
 class Logger:
     _instance = None
     _loggers = {}
@@ -52,7 +55,7 @@ class Logger:
         return cls._instance
 
     def __init__(self):
-        if not hasattr(self, 'logger'):  # 처음 초기화할 때만 실행
+        if not hasattr(self, "logger"):  # 처음 초기화할 때만 실행
             # skipcq: PTC-W0052
             self.logger = logging.getLogger(Logger._logger_name)
             self.logger.setLevel(Logger._logger_level)
@@ -70,11 +73,12 @@ class Logger:
                         os.makedirs(Logger._default_path, exist_ok=True)
 
                         # Construct the full file path
-                        filename = os.path.join(Logger._default_path,
-                                                f"{Logger._logger_name}.log")
+                        filename = os.path.join(
+                            Logger._default_path, f"{Logger._logger_name}.log"
+                        )
 
                         # Create the file if it doesn't exist
-                        open(filename, 'a').close()
+                        open(filename, "a").close()
 
                         file_handler = logging.FileHandler(filename)
                         file_handler.setFormatter(FileFormatter())

@@ -1,3 +1,3 @@
 from core.fuzzer import Fuzzer
 
-__all__ = ['Fuzzer']
+__all__ = ["Fuzzer"]

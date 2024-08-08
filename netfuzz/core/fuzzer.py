@@ -1,5 +1,6 @@
 from utils.log import Logger
 
+
 class Fuzzer:
     def __init__(self, strategy):
         self.strategy = strategy
