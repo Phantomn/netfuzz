@@ -1,82 +1,112 @@
-from boofuzz import (
-    Session,
-    Target,
-    TCPSocketConnection,
-    FuzzLoggerText,
-    FuzzLoggerCurses,
-    Request,
-    String,
-    Delim,
-    Static,
-)
+import re
+from boofuzz import Request, String, Delim, Static, Session
 from protocols.strategy import Strategy
 
 
+class BooFtpException(Exception):
+    pass
+
+
 class FTP(Strategy):
-    def __init__(self, addr):
-        self.addr = addr
-        self.session = Session(
-            target=Target(connection=TCPSocketConnection(self.addr, 21)),
-            fuzz_loggers=[
-                FuzzLoggerText(file_handle=open("./logs/output.txt", "w")),
-                FuzzLoggerCurses(),
-            ],
-        )
+    def __init__(self, username: str, password: str):
+        """
+        Initialize FTP strategy with username and password.
 
-    def define_proto(self):
-        user = Request(
-            "user",
-            children=(
-                String(name="key", default_value="USER"),
-                Delim(name="space", default_value=" "),
-                String(name="val", default_value="phantom"),
-                Static(name="end", default_value="\r\n"),
-            ),
-        )
+        Args:
+            username (str): FTP username.
+            password (str): FTP password.
+        """
+        self.username = username
+        self.password = password
 
-        passwd = Request(
-            "pass",
-            children=(
-                String(name="key", default_value="PASS"),
-                Delim(name="space", default_value=" "),
-                String(name="val", default_value="1"),
-                Static(name="end", default_value="\r\n"),
-            ),
-        )
+    def setup_session(self, session: Session):
+        """
+        Define FTP protocol commands and establish connections.
 
-        stor = Request(
-            "stor",
-            children=(
-                String(name="key", default_value="STOR"),
-                Delim(name="space", default_value=" "),
-                String(name="val", default_value="AAAA"),
-                Static(name="end", default_value="\r\n"),
-            ),
-        )
+        Args:
+            session (Session): The fuzzing session object.
+        """
+        user = self._ftp_cmd_1_arg(cmd_code="USER", default_value=self.username)
+        password = self._ftp_cmd_1_arg(cmd_code="PASS", default_value=self.password)
+        stor = self._ftp_cmd_1_arg(cmd_code="STOR", default_value="AAAA")
+        retr = self._ftp_cmd_1_arg(cmd_code="RETR", default_value="AAAA")
+        mkd = self._ftp_cmd_1_arg(cmd_code="MKD", default_value="AAAA")
+        abor = self._ftp_cmd_0_arg(cmd_code="ABOR")
 
-        retr = Request(
-            "retr",
-            children=(
-                String(name="key", default_value="RETR"),
-                Delim(name="space", default_value=" "),
-                String(name="val", default_value="AAAA"),
-                Static(name="end", default_value="\r\n"),
-            ),
-        )
+        # Establish connections with callback for reply code check
+        session.connect(user, callback=self.check_reply_code)
+        session.connect(user, password, callback=self.check_reply_code)
+        session.connect(password, stor, callback=self.check_reply_code)
+        session.connect(password, retr, callback=self.check_reply_code)
+        session.connect(password, mkd, callback=self.check_reply_code)
+        session.connect(password, abor, callback=self.check_reply_code)
+        session.connect(stor, abor, callback=self.check_reply_code)
+        session.connect(retr, abor, callback=self.check_reply_code)
+        session.connect(mkd, abor, callback=self.check_reply_code)
 
-        # 명령어 연결 정의
-        self.session.connect(user)
-        self.session.connect(user, passwd)
-        self.session.connect(passwd, stor)
-        self.session.connect(passwd, retr)
+    def check_reply_code(
+        self, target, fuzz_data_logger, session, test_case_context, *args, **kwargs
+    ):
+        """
+        Callback function to check the reply code from the FTP server.
+        """
+        if test_case_context.previous_message.name == "__ROOT_NODE__":
+            return
+        else:
+            try:
+                fuzz_data_logger.log_info(
+                    f"Parsing reply contents: {session.last_recv}"
+                )
+                self.parse_ftp_reply(session.last_recv)
+            except BooFtpException as e:
+                fuzz_data_logger.log_fail(str(e))
+            fuzz_data_logger.log_pass()
 
-    def fuzz(self):
-        print("Starting FTP fuzzing session")
-        self.define_proto()
+    def parse_ftp_reply(self, data):
+        """
+        Parse FTP reply and return reply code. Raise BooFtpException if reply is invalid.
+        """
+        reply_code_len = 3
+        if len(data) < reply_code_len:
+            raise BooFtpException(
+                "Invalid FTP reply, too short; must be a 3-digit sequence followed by a space"
+            )
         try:
-            self.session.fuzz()
-        except Exception as e:
-            print("Fuzzing session crashed", str(e).encode())
-            print("Crash saved to database.")
-        finally:
-            print("FTP fuzzing session completed")
+            reply = data[0 : reply_code_len + 1].decode("ascii")
+        except ValueError:
+            raise BooFtpException(
+                "Invalid FTP reply, non-ASCII characters; must be a 3-digit sequence followed by a space"
+            )
+        if not re.match("[1-5][0-9][0-9] ", reply[0:4]):
+            raise BooFtpException(
+                "Invalid FTP reply; must be a 3-digit sequence followed by a space"
+            )
+        return reply[0:reply_code_len]
+
+    @staticmethod
+    def _ftp_cmd_0_arg(cmd_code):
+        """
+        Define an FTP command with no arguments.
+        """
+        return Request(
+            cmd_code.lower(),
+            children=(
+                String(name="key", default_value=cmd_code),
+                Static(name="end", default_value="\r\n"),
+            ),
+        )
+
+    @staticmethod
+    def _ftp_cmd_1_arg(cmd_code, default_value):
+        """
+        Define an FTP command with one argument.
+        """
+        return Request(
+            cmd_code.lower(),
+            children=(
+                String(name="key", default_value=cmd_code),
+                Delim(name="sep", default_value=" "),
+                String(name="value", default_value=default_value),
+                Static(name="end", default_value="\r\n"),
+            ),
+        )
