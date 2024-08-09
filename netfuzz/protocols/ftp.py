@@ -49,7 +49,7 @@ class FTP(Strategy):
             return
         else:
             try:
-                fuzz_data_logger.log_info("Parsing reply contents: {0}".format(session.last_recv))
+                fuzz_data_logger.log_info(f"Parsing reply contents: {session.last_recv}")
                 self.parse_ftp_reply(session.last_recv)
             except BooFtpException as e:
                 fuzz_data_logger.log_fail(str(e))
