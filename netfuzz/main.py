@@ -62,6 +62,7 @@ def handle_sigint(_signum, _frame):
     print("CTRL+C Pressed, exiting...")
     sys.exit(0)
 
+
 def setup_process_monitor(args, crash_filename="crashes"):
     """
     Setup the process monitor based on the provided arguments.
@@ -72,7 +73,8 @@ def setup_process_monitor(args, crash_filename="crashes"):
             proc_name=None,
             pid_to_ignore=None,
             debugger_class=DebuggerThreadSimple,
-            level=1)
+            level=1,
+        )
     else:
         procmon = None
 
@@ -88,12 +90,11 @@ def setup_process_monitor(args, crash_filename="crashes"):
         procmon.set_options(**procmon_options)
 
     if args.procmon_host:
-        procmon = ProcessMonitor(
-            host=args.procmon_host,
-            port=args.procmon_port)
+        procmon = ProcessMonitor(host=args.procmon_host, port=args.procmon_port)
         procmon.set_options(**procmon_options)
 
     return procmon
+
 
 def setup_fuzz_loggers(args):
     """
@@ -105,10 +106,11 @@ def setup_fuzz_loggers(args):
     if args.tui:
         fuzz_loggers.append(FuzzLoggerCurses())
     if args.csv_out:
-        f = open(args.csv_out, 'w')
+        f = open(args.csv_out, "w")
         fuzz_loggers.append(FuzzLoggerCsv(file_handle=f))
 
     return fuzz_loggers
+
 
 def configure_session_indices(session, args):
     """
@@ -130,6 +132,7 @@ def configure_session_indices(session, args):
     session.index_end = end
     return fuzz_only_one_case
 
+
 def run_fuzzing(session, args, fuzz_only_one_case):
     """
     Run the fuzzing session based on the provided arguments.
@@ -142,6 +145,7 @@ def run_fuzzing(session, args, fuzz_only_one_case):
         session.fuzz_by_name(args.test_case_name)
     else:
         session.fuzz()
+
 
 def main():
     signal.signal(signal.SIGINT, handle_sigint)  # Register signal handler for CTRL+C
@@ -156,7 +160,7 @@ def main():
     session = Session(
         target=Target(connection=connection, monitors=[procmon] if procmon else []),
         fuzz_loggers=fuzz_loggers,
-        sleep_time=args.sleep_between_cases
+        sleep_time=args.sleep_between_cases,
     )
 
     # Initialize FTP strategy with username and password
@@ -164,7 +168,7 @@ def main():
     ftp.setup_session(session)
 
     fuzz_only_one_case = configure_session_indices(session, args)
-    
+
     try:
         run_fuzzing(session, args, fuzz_only_one_case)
     finally:
