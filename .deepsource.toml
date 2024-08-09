@@ -8,3 +8,5 @@ name = "python"
 
 [[transformers]]
 name = "black"
+
+DEEPSOURCE_DSN=https://63c3e4e8f2944f75996d1498e8bbaeb3@app.deepsource.com
