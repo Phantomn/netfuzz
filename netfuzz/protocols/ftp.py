@@ -52,17 +52,17 @@ class FTP(Strategy):
         """
         if test_case_context.previous_message.name == "__ROOT_NODE__":
             return
-        else:
-            try:
-                fuzz_data_logger.log_info(
-                    "Parsing reply contents: {0}".format(session.last_recv)
-                )
-                self.parse_ftp_reply(session.last_recv)
-            except BooFtpException as e:
-                fuzz_data_logger.log_fail(str(e))
-            fuzz_data_logger.log_pass()
+        try:
+            fuzz_data_logger.log_info(
+                "Parsing reply contents: {0}".format(session.last_recv)
+            )
+            self.parse_ftp_reply(session.last_recv)
+        except BooFtpException as e:
+            fuzz_data_logger.log_fail(str(e))
+        fuzz_data_logger.log_pass()
 
-    def parse_ftp_reply(self, data):
+    @staticmethod
+    def parse_ftp_reply(data):
         """
         Parse FTP reply and return reply code. Raise BooFtpException if reply is invalid.
         """
@@ -71,21 +71,20 @@ class FTP(Strategy):
             raise BooFtpException(
                 "Invalid FTP reply, too short; must be a 3-digit sequence followed by a space"
             )
-        else:
-            try:
-                reply = data[0 : reply_code_len + 1].decode("ascii")
-            except ValueError:
-                raise BooFtpException(
-                    "Invalid FTP reply, non-ASCII characters; must be a 3-digit sequence followed by a space"
-                )
-            if not re.match("[1-5][0-9][0-9] ", reply[0:4]):
-                raise BooFtpException(
-                    "Invalid FTP reply; must be a 3-digit sequence followed by a space"
-                )
-            else:
-                return reply[0:reply_code_len]
+        try:
+            reply = data[0 : reply_code_len + 1].decode("ascii")
+        except ValueError:
+            raise BooFtpException(
+                "Invalid FTP reply, non-ASCII characters; must be a 3-digit sequence followed by a space"
+            )
+        if not re.match("[1-5][0-9][0-9] ", reply[0:4]):
+            raise BooFtpException(
+                "Invalid FTP reply; must be a 3-digit sequence followed by a space"
+            )
+        return reply[0:reply_code_len]
 
-    def _ftp_cmd_0_arg(self, cmd_code):
+    @staticmethod
+    def _ftp_cmd_0_arg(cmd_code):
         """
         Define an FTP command with no arguments.
         """
@@ -97,7 +96,8 @@ class FTP(Strategy):
             ),
         )
 
-    def _ftp_cmd_1_arg(self, cmd_code, default_value):
+    @staticmethod
+    def _ftp_cmd_1_arg(cmd_code, default_value):
         """
         Define an FTP command with one argument.
         """

@@ -16,7 +16,6 @@ class Strategy(ABC):
             username (str): Username for the protocol.
             password (str): Password for the protocol.
         """
-        pass
 
     @abstractmethod
     def setup_session(self, session: Session):
@@ -26,7 +25,6 @@ class Strategy(ABC):
         Args:
             session (Session): The fuzzing session object.
         """
-        pass
 
     @abstractmethod
     def check_reply_code(
@@ -41,4 +39,3 @@ class Strategy(ABC):
             session: The fuzzing session object.
             test_case_context: Context for the test case.
         """
-        pass
