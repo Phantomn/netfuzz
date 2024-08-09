@@ -58,6 +58,7 @@ def parse_args():
     )
     return parser.parse_args()
 
+
 def handle_sigint(_signum, _frame):
     print("CTRL+C Pressed, exiting...")
     sys.exit(0)
