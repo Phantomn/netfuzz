@@ -1,30 +1,56 @@
-from boofuzz import Session, Target, s_initialize, s_string, s_static, s_get
+from boofuzz import *
 from protocols.strategy import Strategy
-from utils.log import Logger
 
 
 class FTP(Strategy):
     def __init__(self, addr):
-        self.logger = Logger.getLogger()
         self.addr = addr
-
+        self.session = Session(target=Target(connection=TCPSocketConnection(self.addr, 21)),
+                               fuzz_loggers=[FuzzLoggerText(file_handle=open("./logs/output.txt", "w")),
+                                             FuzzLoggerCurses()])
+        
+    def define_proto(self):
+        user = Request("user", children=(
+            String(name="key", default_value="USER"),
+            Delim(name="space", default_value=" "),
+            String(name="val", default_value="phantom"),
+            Static(name="end", default_value="\r\n"),
+        ))
+        
+        passwd = Request("pass", children=(
+            String(name="key", default_value="PASS"),
+            Delim(name="space", default_value=" "),
+            String(name="val", default_value="1"),
+            Static(name="end", default_value="\r\n"),
+        ))
+        
+        stor = Request("stor", children=(
+            String(name="key", default_value="STOR"),
+            Delim(name="space", default_value=" "),
+            String(name="val", default_value="AAAA"),
+            Static(name="end", default_value="\r\n"),
+        ))
+        
+        retr = Request("retr", children=(
+            String(name="key", default_value="RETR"),
+            Delim(name="space", default_value=" "),
+            String(name="val", default_value="AAAA"),
+            Static(name="end", default_value="\r\n"),
+        ))
+        
+        # 명령어 연결 정의
+        self.session.connect(user)
+        self.session.connect(user, passwd)
+        self.session.connect(passwd, stor)
+        self.session.connect(passwd, retr)
+        
     def fuzz(self):
-        self.logger.info("Initializing FTP fuzzing session")
-        session = Session(target=Target(connection=(self.addr, 21)))
-
-        s_initialize("USER")
-        s_static("USER")
-        s_string("anonymous")
-        s_static("\r\n")
-
-        s_initialize("PASS")
-        s_static("PASS")
-        s_string("password")
-        s_static("\r\n")
-
-        session.connect(s_get("USER"))
-        session.connect(s_get("PASS"))
-
-        self.logger.info("Starting FTP fuzzing")
-        session.fuzz()
-        self.logger.info("FTP fuzzing completed")
+        print("Starting FTP fuzzing session")
+        self.define_proto()
+        try:
+            self.session.fuzz()
+        except Exception as e:
+            print("Fuzzing session crashed", str(e).encode())
+            print("Crash saved to database.")
+        finally:
+            print("FTP fuzzing session completed")
