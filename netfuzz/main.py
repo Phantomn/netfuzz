@@ -9,24 +9,53 @@ from boofuzz.utils.process_monitor_local import ProcessMonitorLocal
 from boofuzz.utils.debugger_thread_simple import DebuggerThreadSimple
 from boofuzz import FuzzLoggerText, FuzzLoggerCsv, FuzzLoggerCurses
 
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Network Protocol Fuzzer")
-    parser.add_argument('--target-host', required=True, help='Host or IP address of target')
-    parser.add_argument('--target-port', type=int, default=21, help='Network port of target')
-    parser.add_argument('--username', required=True, help='FTP username')
-    parser.add_argument('--password', required=True, help='FTP password')
-    parser.add_argument('--test-case-index', help='Test case index', type=str)
-    parser.add_argument('--test-case-name', help='Name of node or specific test case')
-    parser.add_argument('--csv-out', help='Output to CSV file')
-    parser.add_argument('--sleep-between-cases', type=float, default=0, help='Wait time between test cases')
-    parser.add_argument('--procmon-host', help='Process monitor host or IP')
-    parser.add_argument('--procmon-port', type=int, default=DEFAULT_PROCMON_PORT, help='Process monitor port')
-    parser.add_argument('--procmon-start', help='Process monitor start command')
-    parser.add_argument('--procmon-capture', action='store_true', help='Capture stdout/stderr from target process upon failure')
-    parser.add_argument('--tui', action='store_true', help='Enable TUI')
-    parser.add_argument('--text-dump', action='store_true', help='Enable full text dump of logs')
-    parser.add_argument('--feature-check', action='store_true', help='Run a feature check instead of a fuzz test')
-    parser.add_argument('target_cmdline', nargs=argparse.REMAINDER, help='Target command line for process monitor')
+    parser.add_argument(
+        "--target-host", required=True, help="Host or IP address of target"
+    )
+    parser.add_argument(
+        "--target-port", type=int, default=21, help="Network port of target"
+    )
+    parser.add_argument("--username", required=True, help="FTP username")
+    parser.add_argument("--password", required=True, help="FTP password")
+    parser.add_argument("--test-case-index", help="Test case index", type=str)
+    parser.add_argument("--test-case-name", help="Name of node or specific test case")
+    parser.add_argument("--csv-out", help="Output to CSV file")
+    parser.add_argument(
+        "--sleep-between-cases",
+        type=float,
+        default=0,
+        help="Wait time between test cases",
+    )
+    parser.add_argument("--procmon-host", help="Process monitor host or IP")
+    parser.add_argument(
+        "--procmon-port",
+        type=int,
+        default=DEFAULT_PROCMON_PORT,
+        help="Process monitor port",
+    )
+    parser.add_argument("--procmon-start", help="Process monitor start command")
+    parser.add_argument(
+        "--procmon-capture",
+        action="store_true",
+        help="Capture stdout/stderr from target process upon failure",
+    )
+    parser.add_argument("--tui", action="store_true", help="Enable TUI")
+    parser.add_argument(
+        "--text-dump", action="store_true", help="Enable full text dump of logs"
+    )
+    parser.add_argument(
+        "--feature-check",
+        action="store_true",
+        help="Run a feature check instead of a fuzz test",
+    )
+    parser.add_argument(
+        "target_cmdline",
+        nargs=argparse.REMAINDER,
+        help="Target command line for process monitor",
+    )
     return parser.parse_args()
 
 def handle_sigint(signum, frame):
@@ -49,11 +78,11 @@ def setup_process_monitor(args, crash_filename="crashes"):
 
     procmon_options = {}
     if args.procmon_start:
-        procmon_options['start_commands'] = [args.procmon_start]
+        procmon_options["start_commands"] = [args.procmon_start]
     if args.target_cmdline:
-        procmon_options['start_commands'] = [args.target_cmdline]
+        procmon_options["start_commands"] = [args.target_cmdline]
     if args.procmon_capture:
-        procmon_options['capture_output'] = True
+        procmon_options["capture_output"] = True
 
     if procmon:
         procmon.set_options(**procmon_options)
@@ -141,10 +170,11 @@ def main():
     finally:
         # Ensure resources are properly released
         for logger in fuzz_loggers:
-            if hasattr(logger, 'close'):
+            if hasattr(logger, "close"):
                 logger.close()
         if procmon:
             procmon.stop_target()
+
 
 if __name__ == "__main__":
     main()

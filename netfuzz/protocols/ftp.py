@@ -2,24 +2,27 @@ import re
 from boofuzz import Request, String, Delim, Static, Session
 from protocols.strategy import Strategy
 
+
 class BooFtpException(Exception):
     pass
+
+
 class FTP(Strategy):
     def __init__(self, username: str, password: str):
         """
         Initialize FTP strategy with username and password.
-        
+
         Args:
             username (str): FTP username.
             password (str): FTP password.
         """
         self.username = username
         self.password = password
-    
+
     def setup_session(self, session: Session):
         """
         Define FTP protocol commands and establish connections.
-        
+
         Args:
             session (Session): The fuzzing session object.
         """
@@ -40,8 +43,10 @@ class FTP(Strategy):
         session.connect(stor, abor, callback=self.check_reply_code)
         session.connect(retr, abor, callback=self.check_reply_code)
         session.connect(mkd, abor, callback=self.check_reply_code)
-    
-    def check_reply_code(self, target, fuzz_data_logger, session, test_case_context, *args, **kwargs):
+
+    def check_reply_code(
+        self, target, fuzz_data_logger, session, test_case_context, *args, **kwargs
+    ):
         """
         Callback function to check the reply code from the FTP server.
         """
@@ -61,39 +66,45 @@ class FTP(Strategy):
         """
         reply_code_len = 3
         if len(data) < reply_code_len:
-            raise BooFtpException("Invalid FTP reply, too short; must be a 3-digit sequence followed by a space")
-        else:
-            try:
-                reply = data[0:reply_code_len+1].decode('ascii')
-            except ValueError:
-                raise BooFtpException("Invalid FTP reply, non-ASCII characters; must be a 3-digit sequence followed by a space")
-            if not re.match('[1-5][0-9][0-9] ', reply[0:4]):
-                raise BooFtpException("Invalid FTP reply; must be a 3-digit sequence followed by a space")
-            else:
-                return reply[0:reply_code_len]
+            raise BooFtpException(
+                "Invalid FTP reply, too short; must be a 3-digit sequence followed by a space"
+            )
+        try:
+            reply = data[0 : reply_code_len + 1].decode("ascii")
+        except ValueError:
+            raise BooFtpException(
+                "Invalid FTP reply, non-ASCII characters; must be a 3-digit sequence followed by a space"
+            )
+        if not re.match("[1-5][0-9][0-9] ", reply[0:4]):
+            raise BooFtpException(
+                "Invalid FTP reply; must be a 3-digit sequence followed by a space"
+            )
+        return reply[0:reply_code_len]
 
-    def _ftp_cmd_0_arg(self, cmd_code):
+    @staticmethod
+    def _ftp_cmd_0_arg(cmd_code):
         """
         Define an FTP command with no arguments.
         """
         return Request(
             cmd_code.lower(),
             children=(
-                String(name='key', default_value=cmd_code),
-                Static(name='end', default_value='\r\n'),
+                String(name="key", default_value=cmd_code),
+                Static(name="end", default_value="\r\n"),
             ),
         )
 
-    def _ftp_cmd_1_arg(self, cmd_code, default_value):
+    @staticmethod
+    def _ftp_cmd_1_arg(cmd_code, default_value):
         """
         Define an FTP command with one argument.
         """
         return Request(
             cmd_code.lower(),
             children=(
-                String(name='key', default_value=cmd_code),
-                Delim(name='sep', default_value=' '),
-                String(name='value', default_value=default_value),
-                Static(name='end', default_value='\r\n'),
+                String(name="key", default_value=cmd_code),
+                Delim(name="sep", default_value=" "),
+                String(name="value", default_value=default_value),
+                Static(name="end", default_value="\r\n"),
             ),
         )
