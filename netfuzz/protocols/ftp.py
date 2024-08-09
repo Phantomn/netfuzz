@@ -1,4 +1,4 @@
-from boofuzz import *
+from boofuzz import Session, Target, TCPSocketConnection, FuzzLoggerText, FuzzLoggerCurses, Request, String, Delim, Static
 from protocols.strategy import Strategy
 
 
