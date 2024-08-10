@@ -1,4 +1,4 @@
-from ftp import FTP
-from strategy import Strategy
+from netfuzz.protocols.ftp import FTP
+from netfuzz.protocols.strategy import Strategy
 
 __all__ = ["FTP", "Strategy"]
