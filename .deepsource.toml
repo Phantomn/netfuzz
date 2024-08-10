@@ -1,10 +1,18 @@
 version = 1
 
+test_patterns = [
+  "tests/**",
+  "test_*.py"
+]
+
 [[analyzers]]
 name = "python"
+enabled = true
+dependency_file_path = ["requirements.txt"]
 
   [analyzers.meta]
   runtime_version = "3.x.x"
+  cyclomatic_complexity_threshold = "high"
 
 [[transformers]]
 name = "black"

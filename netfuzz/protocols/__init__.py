@@ -1,4 +1,4 @@
-from protocols.strategy import Strategy
-from protocols.ftp import FTP
+from . import ftp
+from . import strategy
 
-__all__ = ["FTP", "Strategy"]
+__all__ = ['ftp', 'strategy']

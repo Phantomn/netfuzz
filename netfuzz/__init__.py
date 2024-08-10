@@ -1,5 +1,6 @@
-from core.fuzzer import Fuzzer
-from protocols.ftp import FTP
-from protocols.strategy import Strategy
+from . import core
+from . import main
+from . import protocols
+from . import tests
 
-__all__ = ["Fuzzer", "FTP", "Strategy"]
+__all__ = ['core', 'main', 'protocols', 'tests']

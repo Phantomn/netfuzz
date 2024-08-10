@@ -1,6 +1,6 @@
 import re
 from boofuzz import Request, String, Delim, Static, Session
-from protocols.strategy import Strategy
+from netfuzz.protocols.strategy import Strategy
 
 
 class BooFtpException(Exception):
