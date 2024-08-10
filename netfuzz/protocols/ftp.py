@@ -53,18 +53,16 @@ class FTP(Strategy):
         if test_case_context.previous_message.name == "__ROOT_NODE__":
             return
         try:
-            fuzz_data_logger.log_info(
-                f"Parsing reply contents: {session.last_recv}"
-            )
+            fuzz_data_logger.log_info(f"Parsing reply contents: {session.last_recv}")
             self.parse_ftp_reply(session.last_recv)
         except BooFtpException as e:
             fuzz_data_logger.log_fail(str(e))
         fuzz_data_logger.log_pass()
-            
+
     @staticmethod
     def parse_ftp_reply(self, data):
         """
-        Parse FTP reply and return reply code. 
+        Parse FTP reply and return reply code.
         Raise BooFtpException if reply is invalid.
         """
         reply_code_len = 3
