@@ -1,7 +1,7 @@
 import argparse
 import sys
 import signal
-from protocols.ftp import FTP
+from netfuzz.protocols.ftp import FTP
 from boofuzz import Session, Target, TCPSocketConnection
 from boofuzz.constants import DEFAULT_PROCMON_PORT
 from boofuzz.monitors import ProcessMonitor

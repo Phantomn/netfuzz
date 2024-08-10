@@ -1,4 +1,4 @@
-from protocols.strategy import Strategy
-from protocols.ftp import FTP
+from ftp import FTP
+from strategy import Strategy
 
 __all__ = ["FTP", "Strategy"]
