@@ -1,3 +1,3 @@
-from . import tests_ftp
+from test_ftp import TestFTP
 
-__all__ = ['tests_ftp']
+__all__ = ['TestFTP']
