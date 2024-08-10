@@ -1,6 +1,6 @@
 import unittest
 from netfuzz.protocols.ftp import FTP, BooFtpException
-from boofuzz import Session, TCPSocketConnection
+from boofuzz import Session
 from unittest.mock import MagicMock
 
 
