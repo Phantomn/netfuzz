@@ -62,7 +62,7 @@ class FTP(Strategy):
         fuzz_data_logger.log_pass()
             
     @staticmethod
-    def parse_ftp_reply(self, data):
+    def parse_ftp_reply(data):
         """
         Parse FTP reply and return reply code. 
         Raise BooFtpException if reply is invalid.
