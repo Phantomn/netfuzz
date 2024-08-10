@@ -1,6 +1,5 @@
 # Specific
 boofuzz-results/
-mono/
 bin/
 # Byte-compiled / optimized / DLL files
 __pycache__/
