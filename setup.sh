@@ -1,24 +1,3 @@
-#!/bin/bash
-
-# setup.sh
-
-echo "Setting up the project environment..."
-
-# Install dependencies
-poetry install
-
-# Run tests
-poetry run pytest
-
-# Lint code
-poetry run flake8 netfuzz
-
-# Cleanup
-find . -type f -name '*.pyc' -delete
-find . -type d -name '__pycache__' -exec rm -r {} +
-
-echo "Setup complete!"
-
 #!/usr/bin/env bash
 set -e
 
@@ -41,7 +20,7 @@ osx() {
 
 install_apt() {
     sudo apt-get update || true
-    sudo apt-get install -y python3-dev python3-venv python3-setuptools
+    sudo apt-get install -y python3-dev python3-venv python3-setuptools curl
 }
 
 usage() {
