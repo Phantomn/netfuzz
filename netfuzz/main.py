@@ -20,12 +20,12 @@ from netfuzz.protocols.ftp import FTP
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Network Protocol Fuzzer")
-    parser.add_argument("--target-host", required=True, help="Host or IP address of target")
-    parser.add_argument("--target-port", type=int, default=21, help="Network port of target")
+    parser.add_argument("--target-host", required=True, help="IP address")
+    parser.add_argument("--target-port", type=int, default=21, help="Port num")
     parser.add_argument("--username", required=True, help="FTP username")
     parser.add_argument("--password", required=True, help="FTP password")
     parser.add_argument("--test-case-index", help="Test case index", type=str)
-    parser.add_argument("--test-case-name", help="Name of node or specific test case")
+    parser.add_argument("--test-case-name", help="Name of test case")
     parser.add_argument("--csv-out", help="Output to CSV file")
     parser.add_argument(
         "--sleep-between-cases",
