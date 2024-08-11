@@ -79,7 +79,7 @@ if uname | grep -iqs Linux; then
     echo "Using virtualenv from path: ${NETFUZZ_VENV_PATH}"
 
     source "${NETFUZZ_VENV_PATH}/bin/activate"
-    $HOME/.local/bin/poetry install --no-root --with dev 
+    $HOME/.local/bin/poetry install --no-root --with dev
 
     # Create a developer marker file
     DEV_MARKER_PATH="${NETFUZZ_VENV_PATH}/dev.marker"

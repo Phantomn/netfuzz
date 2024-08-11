@@ -37,7 +37,7 @@ class TestFTP(unittest.TestCase):
             self.ftp.parse_ftp_reply(reply)
         self.assertEqual(
             str(context.exception),
-            "Invalid FTP reply: must be 3 digits and a space, no non-ASCII",
+            "Invalid FTP reply: must 3 digit & space, not non-ASCII",
         )
 
     def test_parse_invalid_reply_non_ascii(self):
@@ -47,7 +47,7 @@ class TestFTP(unittest.TestCase):
             self.ftp.parse_ftp_reply(reply)
         self.assertEqual(
             str(context.exception),
-            "Invalid FTP reply: must be 3 digits and a space, no non-ASCII",
+            "Invalid FTP reply: must 3 digit & space, not non-ASCII",
         )
 
     def test_parse_invalid_reply_format(self):
@@ -57,7 +57,7 @@ class TestFTP(unittest.TestCase):
             self.ftp.parse_ftp_reply(reply)
         self.assertEqual(
             str(context.exception),
-            "Invalid FTP reply: must be 3 digits and a space",
+            "Invalid FTP reply: must 3 digit & space",
         )
 
 
