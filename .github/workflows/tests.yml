@@ -37,15 +37,15 @@ jobs:
 
     - name: Run tests
       run: |
-        source /venv/bin/activate
+        source .venv/bin/activate
         mkdir .cov
         ./tests.sh --cov
 
     - name: Process coverage data
       if: matrix.os == 'ubuntu-22.04'
       run: |
-        /venv/bin/coverage combine
-        /venv/bin/coverage xml
+        .venv/bin/coverage combine
+        .venv/bin/coverage xml
 
     - name: "Upload coverage to Codecov"
       if: matrix.os == 'ubuntu-22.04'
