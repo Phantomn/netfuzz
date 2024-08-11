@@ -17,3 +17,8 @@ dependency_file_path = ["requirements.txt"]
 [[transformers]]
 name = "black"
 
+[[transformers]]
+name = "isort"
+
+[[transformers]]
+name = "ruff"
