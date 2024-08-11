@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
-# Check if running as root, else provide a mechanism to run as root
-if [ "$(id -u)" -ne 0 ]; then
-    echo "This script needs to be run as root for system package installation."
-    exit 1
+# If we are a root in a container and `sudo` doesn't exist
+# lets overwrite it with a function that just executes things passed to sudo
+# (yeah it won't work for sudo executed with flags)
+if ! hash sudo 2> /dev/null && whoami | grep -q root; then
+    sudo() {
+        ${*}
+    }
 fi
 
 install_apt() {
