@@ -50,3 +50,8 @@ jobs:
     - name: "Upload coverage to Codecov"
       if: matrix.os == 'ubuntu-22.04'
       uses: codecov/codecov-action@v3
+
+    - name: clear .cov dir
+      if: matrix.os == 'ubuntu-22.04'
+      run: |
+        rm -rf .cov
