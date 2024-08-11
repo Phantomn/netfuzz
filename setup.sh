@@ -20,7 +20,7 @@ osx() {
 
 install_apt() {
     sudo apt-get update || true
-    sudo apt-get install -y python3-dev python3-venv python3-setuptools curl
+    sudo apt-get install -y python3.10 python3-dev python3-venv python3-setuptools python-is-python3 curl
 }
 
 usage() {
@@ -38,8 +38,8 @@ if linux; then
     esac
 fi
 
-PYVER=$(python -c 'import platform; print("".join(platform.python_version_tuple()[:2]))')
-PYTHON=$(python -c 'import sys; print(sys.executable)')
+PYVER=$(python3 -c 'import platform; print("".join(platform.python_version_tuple()[:2]))')
+PYTHON=$(python3 -c 'import sys; print(sys.executable)')
 
 if ! osx; then
     PYTHON+="${PYVER}"
