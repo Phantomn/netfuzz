@@ -43,3 +43,9 @@ class Strategy(ABC):
             session: The fuzzing session object.
             test_case_context: Context for the test case.
         """
+
+    @abstractmethod
+    def fuzz(self):
+        """
+        Method to start the fuzzing process.
+        """

@@ -7,6 +7,8 @@ from boofuzz import Request
 from boofuzz import Session
 from boofuzz import Static
 from boofuzz import String
+from boofuzz import Target
+from boofuzz import TCPSocketConnection
 
 from netfuzz.protocols.strategy import Strategy
 
@@ -16,24 +18,29 @@ class BooFtpException(Exception):
 
 
 class FTP(Strategy):
-    def __init__(self, username: str, password: str):
+    def __init__(self, username: str, password: str, target_host: str, target_port: int):
         """
         Initialize FTP strategy with username and password.
 
         Args:
             username (str): FTP username.
             password (str): FTP password.
+            target_host (str): Target host for the FTP server.
+            target_port (int): Target port for the FTP server.
         """
         self.username = username
         self.password = password
+        self.target_host = target_host
+        self.target_port = target_port
+        self.session = None
 
-    def setup_session(self, session: Session):
+    def setup_session(self):
         """
         Define FTP protocol commands and establish connections.
-
-        Args:
-            session (Session): The fuzzing session object.
         """
+        connection = TCPSocketConnection(self.target_host, self.target_port)
+        self.session = Session(target=Target(connection=connection))
+
         user = self._ftp_cmd_1_arg(cmd_code="USER", default_value=self.username)
         password = self._ftp_cmd_1_arg(cmd_code="PASS", default_value=self.password)
         stor = self._ftp_cmd_1_arg(cmd_code="STOR", default_value="AAAA")
@@ -42,15 +49,15 @@ class FTP(Strategy):
         abor = self._ftp_cmd_0_arg(cmd_code="ABOR")
 
         # Establish connections with callback for reply code check
-        session.connect(user, callback=self.check_reply_code)
-        session.connect(user, password, callback=self.check_reply_code)
-        session.connect(password, stor, callback=self.check_reply_code)
-        session.connect(password, retr, callback=self.check_reply_code)
-        session.connect(password, mkd, callback=self.check_reply_code)
-        session.connect(password, abor, callback=self.check_reply_code)
-        session.connect(stor, abor, callback=self.check_reply_code)
-        session.connect(retr, abor, callback=self.check_reply_code)
-        session.connect(mkd, abor, callback=self.check_reply_code)
+        self.session.connect(user, callback=self.check_reply_code)
+        self.session.connect(user, password, callback=self.check_reply_code)
+        self.session.connect(password, stor, callback=self.check_reply_code)
+        self.session.connect(password, retr, callback=self.check_reply_code)
+        self.session.connect(password, mkd, callback=self.check_reply_code)
+        self.session.connect(password, abor, callback=self.check_reply_code)
+        self.session.connect(stor, abor, callback=self.check_reply_code)
+        self.session.connect(retr, abor, callback=self.check_reply_code)
+        self.session.connect(mkd, abor, callback=self.check_reply_code)
 
     def check_reply_code(
         self, target, fuzz_data_logger, session, test_case_context, *args, **kwargs
@@ -111,3 +118,12 @@ class FTP(Strategy):
                 Static(name="end", default_value="\r\n"),
             ),
         )
+
+    def fuzz(self):
+        """
+        Start the fuzzing process for FTP protocol.
+        """
+        if self.session is None:
+            self.setup_session()
+        print(f"Starting FTP fuzzing session on {self.target_host}:{self.target_port}")
+        self.session.fuzz()
