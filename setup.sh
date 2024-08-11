@@ -28,8 +28,6 @@ usage() {
     echo "  --update: Install/update dependencies without checking ~/.gdbinit"
 }
 
-PYTHON=''
-
 if linux; then
     distro=$(grep "^ID=" /etc/os-release | cut -d'=' -f2 | sed -e 's/"//g')
 
@@ -38,6 +36,13 @@ if linux; then
             install_apt
             ;;
     esac
+fi
+
+PYVER=$(python -c 'import platform; print("".join(platform.python_version_tuple()[:2]))')
+PYTHON=$(python -c 'import sys; print(sys.executable)')
+
+if ! osx; then
+    PYTHON+="${PYVER}"
 fi
 
 # Install Poetry
