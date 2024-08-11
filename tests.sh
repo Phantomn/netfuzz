@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Run integration tests
-(cd tests/ && python3 tests.py $@)
+(cd tests/ && python3 test_ftp.py $@)
 exit_code=$?
 
 COV=0
