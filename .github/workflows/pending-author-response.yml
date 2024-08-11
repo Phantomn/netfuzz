@@ -10,5 +10,5 @@ jobs:
     steps:
       - uses: siegerts/pending-author-response@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.TOKEN }}
           pending-response-label: pending-response
