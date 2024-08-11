@@ -9,6 +9,9 @@
     "customizations": {
         "vscode": {
             "settings": {
+                "terminal.integrated.env.linux": {
+                    "TZ": "Asia/Seoul"
+                },
                 "docker.languageserver.formatter.ignoreMultilineInstructions": true,
                 "editor.bracketPairColorization.enabled": true,
                 "editor.fontWeight": "bold",
@@ -55,7 +58,8 @@
         }
     },
     "runArgs": [
-        "--cap-add=SYS_PTRACE"
+        "--cap-add=SYS_PTRACE",
+        "-e", "TZ=Asia/Seoul"
     ],
     "remoteUser": "vscode",
     "workspaceFolder": "/netfuzz",

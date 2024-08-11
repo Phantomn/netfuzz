@@ -1,49 +1,29 @@
 #!/usr/bin/env bash
 set -e
 
-# If we are a root in a container and `sudo` doesn't exist
-# lets overwrite it with a function that just executes things passed to sudo
-# (yeah it won't work for sudo executed with flags)
-if ! hash sudo 2> /dev/null && whoami | grep -q root; then
-    sudo() {
-        ${*}
-    }
+# Check if running as root, else provide a mechanism to run as root
+if [ "$(id -u)" -ne 0 ]; then
+    echo "This script needs to be run as root for system package installation."
+    exit 1
 fi
-
-# Helper functions
-linux() {
-    uname | grep -iqs Linux
-}
-osx() {
-    uname | grep -iqs Darwin
-}
 
 install_apt() {
     sudo apt-get update || true
     sudo apt-get install -y python3.10 python3-dev python3-venv python3-setuptools python-is-python3 curl
 }
 
-usage() {
-    echo "Usage: $0 [--update]"
-    echo "  --update: Install/update dependencies without checking ~/.gdbinit"
-}
+distro=$(grep "^ID=" /etc/os-release | cut -d'=' -f2 | sed -e 's/"//g')
 
-if linux; then
-    distro=$(grep "^ID=" /etc/os-release | cut -d'=' -f2 | sed -e 's/"//g')
-
-    case $distro in
-        "ubuntu")
-            install_apt
-            ;;
-    esac
-fi
+case $distro in
+    "ubuntu")
+        install_apt
+        ;;
+esac
 
 PYVER=$(python -c 'import platform; print(".".join(platform.python_version_tuple()[:2]))')
 PYTHON=$(python -c 'import sys; print(sys.executable)')
 
-if ! osx; then
-    PYTHON+="${PYVER}"
-fi
+PYTHON+="${PYVER}"
 
 # Install Poetry
 if ! command -v poetry &> /dev/null; then
@@ -62,3 +42,14 @@ fi
 ${PYTHON} -m venv -- ${NETFUZZ_VENV_PATH}
 source ${NETFUZZ_VENV_PATH}/bin/activate
 poetry install
+
+
+if uname | grep -iqs Linux; then
+    distro=$(grep "^ID=" /etc/os-release | cut -d '=' -f2 | sed -e 's/"//g')
+
+    case $distro in 
+        "ubuntu")
+            install_apt
+            ;;
+    esac
+fi
