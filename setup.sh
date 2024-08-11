@@ -38,8 +38,8 @@ if linux; then
     esac
 fi
 
-PYVER=$(python3 -c 'import platform; print("".join(platform.python_version_tuple()[:2]))')
-PYTHON=$(python3 -c 'import sys; print(sys.executable)')
+PYVER=$(python -c 'import platform; print(".".join(platform.python_version_tuple()[:2]))')
+PYTHON=$(python -c 'import sys; print(sys.executable)')
 
 if ! osx; then
     PYTHON+="${PYVER}"

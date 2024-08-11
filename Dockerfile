@@ -14,20 +14,20 @@ FROM $image
 WORKDIR /netfuzz
 
 ENV PIP_NO_CACHE_DIR=true
-ENV LANG en_US.utf8
+ENV LANG=en_US.utf8
 ENV TZ=Asia/Seoul
-ENV ZIGPATH=/opt/zig
 ENV NETFUZZ_VENV_PATH=/venv
 
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone && \
-    apt-get update && \
-    apt-get install -y locales && \
-    rm -rf /var/lib/apt/lists/* && \
-    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
-    apt-get update && \
-    apt-get install -y vim
+RUN sed -i 's@archive.ubuntu.com@mirror.kakao.com@g' /etc/apt/sources.list
 
+# Combine commands to reduce layers
+RUN apt-get update -y && apt-get install -y --no-install-recommends locales vim && \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone \
+    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
+    rm -rf /var/lib/apt/lists/*
+
+# Add necessary files
 ADD ./setup.sh /netfuzz/
 ADD ./poetry.lock /netfuzz/
 ADD ./pyproject.toml /netfuzz/
