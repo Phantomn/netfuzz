@@ -75,11 +75,15 @@ class FTP(Strategy):
         """
         reply_code_len = 3
         if len(data) < reply_code_len:
-            raise BooFtpException("Invalid FTP reply: must be 3 digits and a space, no non-ASCII")
+            raise BooFtpException(
+                "Invalid FTP reply: must be 3 digits and a space, no non-ASCII"
+            )
         try:
             reply = data[0 : reply_code_len + 1].decode("ascii")
         except ValueError:
-            raise BooFtpException("Invalid FTP reply: must be 3 digits and a space, no non-ASCII")
+            raise BooFtpException(
+                "Invalid FTP reply: must be 3 digits and a space, no non-ASCII"
+            )
         if not re.match("[1-5][0-9][0-9] ", reply[0:4]):
             raise BooFtpException(
                 "Invalid FTP reply; must be a 3-digit sequence followed by a space"
