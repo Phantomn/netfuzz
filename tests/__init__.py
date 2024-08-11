@@ -1,3 +1,5 @@
-from tests.test_ftp import TestFTP
+from __future__ import annotations
 
-__all__ = ["TestFTP"]
+from . import test_ftp
+
+__all__ = ["test_ftp"]

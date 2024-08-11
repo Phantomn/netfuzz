@@ -1,0 +1,44 @@
+# .github/workflows/main.yml
+
+name: main
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'  # 원하는 Python 버전으로 변경
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests and generate coverage report
+      run: |
+        coverage run -m unittest discover -s netfuzz/tests -p 'tests_ftp.py'
+        coverage xml -o coverage.xml  # XML 형식의 커버리지 리포트를 생성
+
+    - name: Report results to DeepSource
+      run: |
+        # Install deepsource CLI
+        curl https://deepsource.io/cli | sh
+
+        # From the root directory, run the report coverage command
+        ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
+
+      env:
+        DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}

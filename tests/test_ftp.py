@@ -1,7 +1,12 @@
+from __future__ import annotations
+
 import unittest
-from netfuzz.protocols.ftp import FTP, BooFtpException
-from boofuzz import Session
 from unittest.mock import MagicMock
+
+from boofuzz import Session
+
+from netfuzz.protocols.ftp import FTP
+from netfuzz.protocols.ftp import BooFtpException
 
 
 class TestFTP(unittest.TestCase):
@@ -52,7 +57,7 @@ class TestFTP(unittest.TestCase):
             self.ftp.parse_ftp_reply(reply)
         self.assertEqual(
             str(context.exception),
-            "Invalid FTP reply; must be a 3-digit sequence followed by a space",
+            "Invalid FTP reply: must be 3 digits and a space",
         )
 
 

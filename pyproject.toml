@@ -1,0 +1,132 @@
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+ignore = [
+    "A003",
+    "E402",
+    "E501",
+    "E731",
+    "F405",
+    "F821",
+    "W505",
+]
+
+select = [
+    "A",  # flake8-builtins
+    "E",  # pycodestyle
+    "F",  # pyflakes
+    "W",  # pycodestyle
+    "C4", # flake8-comprehensions
+    "ISC", # flake8-implicit-str-concat
+    "SLOT", # flake8-slots
+    "FLY", # flynt
+    "PGH", # pygrep-hooks
+    "RET506", # flake8-return: superfluous-else-raise
+    "RET507", # flake8-return: superfluous-else-continue
+    "RET508", # flake8-return: superfluous-else-break
+    # We want to enable the below lints, but they currently return too many errors
+    # "RET505", # flake8-return: superfluous-else-return
+    # "SLF" # flake8-self
+    # "SIM", # flake8-simplify
+    # "PTH", # flake8-use-pathlib
+]
+
+[tool.ruff.lint.flake8-builtins]
+builtins-ignorelist = [
+    "all",
+    "bin",
+    "breakpoint",
+    "copyright",
+    "dir",
+    "exit",
+    "format",
+    "hex",
+    "map",
+    "max",
+    "min",
+    "next",
+    "type",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.mypy]
+strict_optional = false
+check_untyped_defs = true
+allow_untyped_globals = false
+allow_redefinition = true
+allow_any_generics = false
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+# warn_return_any = true
+# warn_unreachable = true
+show_error_context = true
+pretty = true
+show_error_codes = true
+incremental = false
+disable_error_code = ["assignment", "import-untyped"]
+
+[tool.isort]
+profile = "black"
+force_single_line = true
+# known_third_party = []
+add_imports = "from __future__ import annotations"
+
+[tool.coverage.run]
+branch = true
+parallel = true
+disable_warnings = ["module-not-imported"]
+source = ["${SRC_DIR-.}"]
+# omit = ["ida_script.py"]
+data_file = ".cov/coverage"
+
+[tool.coverage.report]
+# omit = ["ida_script.py", "tests/*"]
+
+[tool.poetry]
+name = "netfuzz"
+version = "1.0.1"
+description = "Network Protocol Fuzzer with boofuzz"
+authors = ["Phantomn <tmdvyr123@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "netfuzz" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+boofuzz = "^0.4.2"
+
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.6.1"
+pytest-cov = "^5.0.0"
+ruff = "^0.5.7"
+mypy = "^1.11.1"
+isort = "^5.13.2"
+sortedcontainers-stubs = "^2.4.2"
+tomli = "^2.0.1"
+types-pygments = "^2.18.0.20240506"
+types-tabulate = "^0.9.0.20240106"
+vermin = "^1.6.0"
+mkinit = "^1.1.0"
+
+
+[tool.poetry.group.docs.dependencies]
+mdutils = "^1.6.0"
+mkdocs = "^1.6.0"
+mkdocs-gen-files = "^0.5.0"
+mkdocs-material = "^9.5.31"
+mkdocs-minify-plugin = "^0.8.0"
+mkdocs-rss-plugin = "^1.15.0"
+mkdocstrings = "^0.25.2"
+mkdocstrings-python = "^1.10.7"
+pymdown-extensions = "^10.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+package-mode = true

@@ -1,4 +1,6 @@
-from netfuzz.protocols.ftp import FTP
-from netfuzz.protocols.strategy import Strategy
+from __future__ import annotations
 
-__all__ = ["FTP", "Strategy"]
+from . import ftp
+from . import strategy
+
+__all__ = ["ftp", "strategy"]

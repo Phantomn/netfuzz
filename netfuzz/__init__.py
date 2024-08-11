@@ -1,6 +1,7 @@
-from netfuzz.core.fuzzer import Fuzzer
-from netfuzz.protocols.ftp import FTP
-from netfuzz.protocols.strategy import Strategy
-from tests import TestFTP
+from __future__ import annotations
 
-__all__ = ["Fuzzer", "FTP", "Strategy", "TestFTP"]
+from . import core
+from . import main
+from . import protocols
+
+__all__ = ["core", "main", "protocols"]

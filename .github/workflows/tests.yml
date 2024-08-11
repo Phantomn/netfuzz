@@ -1,0 +1,52 @@
+name: Unit tests
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - '**'
+      - '!mkdocs.yml'
+      - '!docs/**'
+      - '!*.md'
+  pull_request:
+    paths:
+      - '**'
+      - '!mkdocs.yml'
+      - '!docs/**'
+      - '!*.md'
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@v4
+    - name: Cache for pip
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ matrix.os }}-cache-pip
+
+    - name: Install dependencies
+      run: |
+        ./setup.sh
+        ./setup-dev.sh
+
+    - name: Run tests
+      run: |
+        source .venv/bin/activate
+        mkdir .cov
+        ./tests.sh --cov
+
+    - name: Process coverage data
+      if: matrix.os == 'ubuntu-22.04'
+      run: |
+        .venv/bin/coverage combine
+        .venv/bin/coverage xml
+
+    - name: "Upload coverage to Codecov"
+      if: matrix.os == 'ubuntu-22.04'
+      uses: codecov/codecov-action@v3

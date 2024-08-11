@@ -1,13 +1,21 @@
+from __future__ import annotations
+
 import argparse
-import sys
 import signal
-from netfuzz.protocols.ftp import FTP
-from boofuzz import Session, Target, TCPSocketConnection
+import sys
+
+from boofuzz import FuzzLoggerCsv
+from boofuzz import FuzzLoggerCurses
+from boofuzz import FuzzLoggerText
+from boofuzz import Session
+from boofuzz import Target
+from boofuzz import TCPSocketConnection
 from boofuzz.constants import DEFAULT_PROCMON_PORT
 from boofuzz.monitors import ProcessMonitor
-from boofuzz.utils.process_monitor_local import ProcessMonitorLocal
 from boofuzz.utils.debugger_thread_simple import DebuggerThreadSimple
-from boofuzz import FuzzLoggerText, FuzzLoggerCsv, FuzzLoggerCurses
+from boofuzz.utils.process_monitor_local import ProcessMonitorLocal
+
+from netfuzz.protocols.ftp import FTP
 
 
 def parse_args():
