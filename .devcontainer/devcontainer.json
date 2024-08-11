@@ -35,18 +35,34 @@
                 },
                 "python.analysis.diagnosticMode": "workspace",
                 "python.analysis.typeCheckingMode": "strict",
+                "python.analysis.reportExtraTelemetry": true,
                 "python.analysis.diagnosticSeverityOverrides": {
                     "reportMissingImports": "none",
                     "reportMissingTypeStubs": "none"
                 },
                 "python.languageServer": "Pylance",
                 "python.linting.pylintUseMinimalCheckers": false,
+                "python.linting.flake8Enabled": true,
+                "python.linting.flake8Args": [
+                    "--max-line-length=88",
+                    "--ignore=E203,E266,E501,W503"
+                ],
+                "python.formatting.provider": "black",
+                "python.formatting.blackArgs": [
+                    "--line-length=88"
+                ],
+                "python.sortImports.args": [
+                    "--profile",
+                    "black"
+                ],
                 "python.defaultInterpreterPath": "/venv/bin/python",
                 "python.venvPath": "/venv",
+                "python.terminal.activateEnvironment": true,
                 "[python]": {
                     "editor.defaultFormatter": "charliermarsh.ruff",
                     "editor.codeActionsOnSave": {
-                        "source.organizeImports": "explicit"
+                        "source.fixAll.pylance": true,
+                        "source.organizeImports": true
                     },
                     "editor.formatOnType": true
                 },
@@ -58,10 +74,15 @@
                 "ms-python.isort",
                 "ms-python.mypy-type-checker",
                 "ms-python.python",
-                "ms-python.vscode-pylance"
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter",
+                "ms-python.flake8"
             ]
         }
     },
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
     "runArgs": [
         "--cap-add=SYS_PTRACE",
         "-e",
