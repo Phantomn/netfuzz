@@ -41,6 +41,7 @@
                     "reportMissingTypeStubs": "none"
                 },
                 "python.languageServer": "Pylance",
+                "python.linting.lintOnSave": true,
                 "python.linting.pylintUseMinimalCheckers": false,
                 "python.linting.flake8Enabled": true,
                 "python.linting.flake8Args": [
