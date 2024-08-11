@@ -19,6 +19,7 @@ ENV TZ=Asia/Seoul
 ENV NETFUZZ_VENV_PATH=/venv
 
 RUN sed -i 's@archive.ubuntu.com@mirror.kakao.com@g' /etc/apt/sources.list
+RUN sed -i 's@security.ubuntu.com@mirror.kakao.com@g' /etc/apt/sources.list
 
 # Combine commands to reduce layers
 RUN apt-get update -y && apt-get install -y --no-install-recommends locales vim && \

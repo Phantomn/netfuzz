@@ -1,23 +1,27 @@
+from __future__ import annotations
+
 import argparse
-import sys
 import signal
-from netfuzz.protocols.ftp import FTP
-from boofuzz import Session, Target, TCPSocketConnection
+import sys
+
+from boofuzz import FuzzLoggerCsv
+from boofuzz import FuzzLoggerCurses
+from boofuzz import FuzzLoggerText
+from boofuzz import Session
+from boofuzz import Target
+from boofuzz import TCPSocketConnection
 from boofuzz.constants import DEFAULT_PROCMON_PORT
 from boofuzz.monitors import ProcessMonitor
-from boofuzz.utils.process_monitor_local import ProcessMonitorLocal
 from boofuzz.utils.debugger_thread_simple import DebuggerThreadSimple
-from boofuzz import FuzzLoggerText, FuzzLoggerCsv, FuzzLoggerCurses
+from boofuzz.utils.process_monitor_local import ProcessMonitorLocal
+
+from netfuzz.protocols.ftp import FTP
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Network Protocol Fuzzer")
-    parser.add_argument(
-        "--target-host", required=True, help="Host or IP address of target"
-    )
-    parser.add_argument(
-        "--target-port", type=int, default=21, help="Network port of target"
-    )
+    parser.add_argument("--target-host", required=True, help="Host or IP address of target")
+    parser.add_argument("--target-port", type=int, default=21, help="Network port of target")
     parser.add_argument("--username", required=True, help="FTP username")
     parser.add_argument("--password", required=True, help="FTP password")
     parser.add_argument("--test-case-index", help="Test case index", type=str)
@@ -43,9 +47,7 @@ def parse_args():
         help="Capture stdout/stderr from target process upon failure",
     )
     parser.add_argument("--tui", action="store_true", help="Enable TUI")
-    parser.add_argument(
-        "--text-dump", action="store_true", help="Enable full text dump of logs"
-    )
+    parser.add_argument("--text-dump", action="store_true", help="Enable full text dump of logs")
     parser.add_argument(
         "--feature-check",
         action="store_true",

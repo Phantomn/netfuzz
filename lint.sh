@@ -37,7 +37,7 @@ fi
 
 set -o xtrace
 
-LINT_FILES="netfuzz tests *.py"
+LINT_FILES="netfuzz/**/*.py tests/*.py"
 LINT_TOOLS="isort ruff vermin mypy"
 
 if ! type ${LINT_TOOLS} &> /dev/null; then
@@ -84,5 +84,5 @@ vermin -vvv --no-tips -t=3.8- --eval-annotations --violations ${LINT_FILES}
 
 # mypy is run in a separate step on GitHub Actions
 if [[ -z "$GITHUB_ACTIONS" ]]; then
-    mypy netfuzz gdbinit.py lldbinit.py
+    mypy netfuzz
 fi

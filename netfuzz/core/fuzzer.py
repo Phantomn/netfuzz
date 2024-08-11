@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 class Fuzzer:
     def __init__(self, strategy):
         self.strategy = strategy

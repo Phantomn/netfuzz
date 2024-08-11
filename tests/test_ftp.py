@@ -1,7 +1,12 @@
+from __future__ import annotations
+
 import unittest
-from netfuzz.protocols.ftp import FTP, BooFtpException
-from boofuzz import Session
 from unittest.mock import MagicMock
+
+from boofuzz import Session
+
+from netfuzz.protocols.ftp import FTP
+from netfuzz.protocols.ftp import BooFtpException
 
 
 class TestFTP(unittest.TestCase):

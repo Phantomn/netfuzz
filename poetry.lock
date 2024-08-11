@@ -848,6 +848,32 @@ griffe = ">=0.48"
 mkdocstrings = ">=0.25"
 
 [[package]]
+name = "mkinit"
+version = "1.1.0"
+description = "Autogenerate __init__.py files"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "mkinit-1.1.0-py3-none-any.whl", hash = "sha256:b49dca93956c1e3ba2ae84fa31238745cf1d1aaa47ab53aeda5e22d375a3732a"},
+    {file = "mkinit-1.1.0.tar.gz", hash = "sha256:052ee0ba314fbacfc2d04314812868053a3a3acbd393e6a7c0aea4b9f697f6da"},
+]
+
+[package.dependencies]
+ubelt = ">=1.3.4"
+
+[package.extras]
+all = ["Pygments (>=2.2.0)", "black", "colorama", "coverage (>=4.3.4)", "coverage (>=4.5)", "coverage (>=5.3.1)", "coverage (>=5.3.1)", "coverage (>=5.3.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "lazy-loader (>=0.3)", "packaging (>=21.3)", "pytest (>=4.6.0)", "pytest (>=4.6.0)", "pytest (>=4.6.0,<=4.6.11)", "pytest (>=4.6.0,<=4.6.11)", "pytest (>=4.6.0,<=6.1.2)", "pytest (>=6.2.5)", "pytest-cov (>=2.8.1)", "pytest-cov (>=2.8.1)", "pytest-cov (>=2.9.0)", "pytest-cov (>=3.0.0)", "ubelt (>=1.3.4)", "xdoctest (>=1.1.2)"]
+all-strict = ["Pygments (==2.2.0)", "black", "colorama", "coverage (==4.3.4)", "coverage (==4.5)", "coverage (==5.3.1)", "coverage (==5.3.1)", "coverage (==5.3.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "lazy-loader (==0.3)", "packaging (==21.3)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==6.2.5)", "pytest-cov (==2.8.1)", "pytest-cov (==2.8.1)", "pytest-cov (==2.9.0)", "pytest-cov (==3.0.0)", "ubelt (==1.3.4)", "xdoctest (==1.1.2)"]
+docs = ["Pygments (>=2.9.0)", "myst-parser (>=0.16.1)", "sphinx (>=4.3.2)", "sphinx-autoapi (>=1.8.4)", "sphinx-autobuild (>=2021.3.14)", "sphinx-reredirects (>=0.0.1)", "sphinx-rtd-theme (>=1.0.0)", "sphinxcontrib-napoleon (>=0.7)"]
+docs-strict = ["Pygments (==2.9.0)", "myst-parser (==0.16.1)", "sphinx (==4.3.2)", "sphinx-autoapi (==1.8.4)", "sphinx-autobuild (==2021.3.14)", "sphinx-reredirects (==0.0.1)", "sphinx-rtd-theme (==1.0.0)", "sphinxcontrib-napoleon (==0.7)"]
+optional = ["Pygments (>=2.2.0)", "black", "colorama"]
+optional-strict = ["Pygments (==2.2.0)", "black", "colorama"]
+runtime = ["ubelt (>=1.3.4)"]
+runtime-strict = ["ubelt (==1.3.4)"]
+tests = ["coverage (>=4.3.4)", "coverage (>=4.5)", "coverage (>=5.3.1)", "coverage (>=5.3.1)", "coverage (>=5.3.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "lazy-loader (>=0.3)", "packaging (>=21.3)", "pytest (>=4.6.0)", "pytest (>=4.6.0)", "pytest (>=4.6.0,<=4.6.11)", "pytest (>=4.6.0,<=4.6.11)", "pytest (>=4.6.0,<=6.1.2)", "pytest (>=6.2.5)", "pytest-cov (>=2.8.1)", "pytest-cov (>=2.8.1)", "pytest-cov (>=2.9.0)", "pytest-cov (>=3.0.0)", "xdoctest (>=1.1.2)"]
+tests-strict = ["coverage (==4.3.4)", "coverage (==4.5)", "coverage (==5.3.1)", "coverage (==5.3.1)", "coverage (==5.3.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "lazy-loader (==0.3)", "packaging (==21.3)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==6.2.5)", "pytest-cov (==2.8.1)", "pytest-cov (==2.8.1)", "pytest-cov (==2.9.0)", "pytest-cov (==3.0.0)", "xdoctest (==1.1.2)"]
+
+[[package]]
 name = "msgpack"
 version = "1.0.8"
 description = "MessagePack serializer"
@@ -1557,6 +1583,29 @@ files = [
 ]
 
 [[package]]
+name = "ubelt"
+version = "1.3.6"
+description = "A Python utility belt containing simple tools, a stdlib like feel, and extra batteries"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "ubelt-1.3.6-py3-none-any.whl", hash = "sha256:2a38f260e7f3c25d3618f653d5c900230dc5af56bf0bc1ff85cfdbe9d0c88f0f"},
+    {file = "ubelt-1.3.6.tar.gz", hash = "sha256:327a516a1fc95595096727ae3ae879379bc56fc11fb945857b971ef85a74f698"},
+]
+
+[package.extras]
+all = ["Pygments (>=2.2.0)", "colorama (>=0.4.3)", "coverage (>=4.3.4)", "coverage (>=4.5)", "coverage (>=5.3.1)", "coverage (>=5.3.1)", "coverage (>=5.3.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "coverage (>=7.3.0)", "jaraco.windows (>=3.9.1)", "numpy (>=1.12.0,<2.0.0)", "numpy (>=1.14.5,<2.0.0)", "numpy (>=1.19.2)", "numpy (>=1.19.3)", "numpy (>=1.21.1)", "numpy (>=1.23.2)", "numpy (>=1.26.0)", "packaging (>=21.0)", "pydantic (<2.0)", "pytest (>=4.6.0)", "pytest (>=4.6.0)", "pytest (>=4.6.0,<=4.6.11)", "pytest (>=4.6.0,<=4.6.11)", "pytest (>=4.6.0,<=6.1.2)", "pytest (>=6.2.5)", "pytest (>=8.1.1)", "pytest (>=8.1.1)", "pytest (>=8.1.1)", "pytest-cov (>=2.8.1)", "pytest-cov (>=2.8.1)", "pytest-cov (>=2.9.0)", "pytest-cov (>=3.0.0)", "pytest-timeout (>=1.4.2)", "pytest-timeout (>=2.3.1)", "python-dateutil (>=2.8.1)", "requests (>=2.25.1)", "xdoctest (>=1.1.3)", "xxhash (>=1.3.0)", "xxhash (>=1.3.0)", "xxhash (>=1.4.3)", "xxhash (>=2.0.2)", "xxhash (>=3.0.0)", "xxhash (>=3.2.0)", "xxhash (>=3.4.1)"]
+all-strict = ["Pygments (==2.2.0)", "colorama (==0.4.3)", "coverage (==4.3.4)", "coverage (==4.5)", "coverage (==5.3.1)", "coverage (==5.3.1)", "coverage (==5.3.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "coverage (==7.3.0)", "jaraco.windows (==3.9.1)", "numpy (==1.12.0)", "numpy (==1.14.5)", "numpy (==1.19.2)", "numpy (==1.19.3)", "numpy (==1.21.1)", "numpy (==1.23.2)", "numpy (==1.26.0)", "packaging (==21.0)", "pydantic (<2.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==6.2.5)", "pytest (==8.1.1)", "pytest (==8.1.1)", "pytest (==8.1.1)", "pytest-cov (==2.8.1)", "pytest-cov (==2.8.1)", "pytest-cov (==2.9.0)", "pytest-cov (==3.0.0)", "pytest-timeout (==1.4.2)", "pytest-timeout (==2.3.1)", "python-dateutil (==2.8.1)", "requests (==2.25.1)", "xdoctest (==1.1.3)", "xxhash (==1.3.0)", "xxhash (==1.3.0)", "xxhash (==1.4.3)", "xxhash (==2.0.2)", "xxhash (==3.0.0)", "xxhash (==3.2.0)", "xxhash (==3.4.1)"]
+docs = ["Pygments (>=2.9.0)", "myst-parser (>=0.16.1)", "sphinx (>=4.3.2)", "sphinx-autoapi (>=1.8.4)", "sphinx-autobuild (>=2021.3.14)", "sphinx-reredirects (>=0.0.1)", "sphinx-rtd-theme (>=1.0.0)", "sphinxcontrib-napoleon (>=0.7)"]
+docs-strict = ["Pygments (==2.9.0)", "myst-parser (==0.16.1)", "sphinx (==4.3.2)", "sphinx-autoapi (==1.8.4)", "sphinx-autobuild (==2021.3.14)", "sphinx-reredirects (==0.0.1)", "sphinx-rtd-theme (==1.0.0)", "sphinxcontrib-napoleon (==0.7)"]
+optional = ["Pygments (>=2.2.0)", "colorama (>=0.4.3)", "jaraco.windows (>=3.9.1)", "numpy (>=1.12.0,<2.0.0)", "numpy (>=1.14.5,<2.0.0)", "numpy (>=1.19.2)", "numpy (>=1.19.3)", "numpy (>=1.21.1)", "numpy (>=1.23.2)", "numpy (>=1.26.0)", "packaging (>=21.0)", "pydantic (<2.0)", "python-dateutil (>=2.8.1)", "xxhash (>=1.3.0)", "xxhash (>=1.3.0)", "xxhash (>=1.4.3)", "xxhash (>=2.0.2)", "xxhash (>=3.0.0)", "xxhash (>=3.2.0)", "xxhash (>=3.4.1)"]
+optional-strict = ["Pygments (==2.2.0)", "colorama (==0.4.3)", "jaraco.windows (==3.9.1)", "numpy (==1.12.0)", "numpy (==1.14.5)", "numpy (==1.19.2)", "numpy (==1.19.3)", "numpy (==1.21.1)", "numpy (==1.23.2)", "numpy (==1.26.0)", "packaging (==21.0)", "pydantic (<2.0)", "python-dateutil (==2.8.1)", "xxhash (==1.3.0)", "xxhash (==1.3.0)", "xxhash (==1.4.3)", "xxhash (==2.0.2)", "xxhash (==3.0.0)", "xxhash (==3.2.0)", "xxhash (==3.4.1)"]
+tests = ["coverage (>=4.3.4)", "coverage (>=4.5)", "coverage (>=5.3.1)", "coverage (>=5.3.1)", "coverage (>=5.3.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "coverage (>=6.1.1)", "coverage (>=7.3.0)", "pytest (>=4.6.0)", "pytest (>=4.6.0)", "pytest (>=4.6.0,<=4.6.11)", "pytest (>=4.6.0,<=4.6.11)", "pytest (>=4.6.0,<=6.1.2)", "pytest (>=6.2.5)", "pytest (>=8.1.1)", "pytest (>=8.1.1)", "pytest (>=8.1.1)", "pytest-cov (>=2.8.1)", "pytest-cov (>=2.8.1)", "pytest-cov (>=2.9.0)", "pytest-cov (>=3.0.0)", "pytest-timeout (>=1.4.2)", "pytest-timeout (>=2.3.1)", "requests (>=2.25.1)", "xdoctest (>=1.1.3)"]
+tests-strict = ["coverage (==4.3.4)", "coverage (==4.5)", "coverage (==5.3.1)", "coverage (==5.3.1)", "coverage (==5.3.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "coverage (==6.1.1)", "coverage (==7.3.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==6.2.5)", "pytest (==8.1.1)", "pytest (==8.1.1)", "pytest (==8.1.1)", "pytest-cov (==2.8.1)", "pytest-cov (==2.8.1)", "pytest-cov (==2.9.0)", "pytest-cov (==3.0.0)", "pytest-timeout (==1.4.2)", "pytest-timeout (==2.3.1)", "requests (==2.25.1)", "xdoctest (==1.1.3)"]
+types = ["autoflake (>=1.4)", "mypy", "yapf (>=0.32.0)"]
+types-strict = ["autoflake (==1.4)", "mypy", "yapf (==0.32.0)"]
+
+[[package]]
 name = "urllib3"
 version = "2.2.2"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -1572,6 +1621,17 @@ brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
 h2 = ["h2 (>=4,<5)"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
+
+[[package]]
+name = "vermin"
+version = "1.6.0"
+description = "Concurrently detect the minimum Python versions needed to run code"
+optional = false
+python-versions = ">=3.0"
+files = [
+    {file = "vermin-1.6.0-py2.py3-none-any.whl", hash = "sha256:f1fa9ee40f59983dc40e0477eb2b1fa8061a3df4c3b2bcf349add462a5610efb"},
+    {file = "vermin-1.6.0.tar.gz", hash = "sha256:6266ca02f55d1c2aa189a610017c132eb2d1934f09e72a955b1eb3820ee6d4ef"},
+]
 
 [[package]]
 name = "watchdog"
@@ -1637,4 +1697,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "22c76caf04d7e32e638bf3fc347f85cca7eb724708a8f6997d5d1eae68eb739d"
+content-hash = "c5a908763fb8227848f8b7481cfde7282a0e8da86857831b4a3fe58d2c188a62"
