@@ -26,17 +26,16 @@ jobs:
     - name: Install dependencies
       run: |
         ./setup.sh
-        ./setup-dev.sh
 
     - name: Run linters
       run: |
-        git diff-index --quiet HEAD -- pwndbg tests
+        git diff-index --quiet HEAD -- netfuzz tests
         ./lint.sh
 
     - name: Run mypy
       uses: tsuyoshicho/action-mypy@v4
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.TOKEN }}
         # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
         reporter: github-pr-check
         # Change reporter level if you need.
