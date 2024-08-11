@@ -81,9 +81,7 @@ class FTP(Strategy):
         except ValueError:
             raise BooFtpException("Invalid FTP reply: must be 3 digits and a space, no non-ASCII")
         if not re.match("[1-5][0-9][0-9] ", reply[0:4]):
-            raise BooFtpException(
-                "Invalid FTP reply; must be a 3-digit sequence followed by a space"
-            )
+            raise BooFtpException("Invalid FTP reply: must be 3 digits and a space")
         return reply[0:reply_code_len]
 
     @staticmethod

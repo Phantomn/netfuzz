@@ -57,7 +57,7 @@ class TestFTP(unittest.TestCase):
             self.ftp.parse_ftp_reply(reply)
         self.assertEqual(
             str(context.exception),
-            "Invalid FTP reply; must be a 3-digit sequence followed by a space",
+            "Invalid FTP reply: must be 3 digits and a space",
         )
 
 
