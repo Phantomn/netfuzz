@@ -67,6 +67,7 @@ show_error_context = true
 pretty = true
 show_error_codes = true
 incremental = false
+ignore_missing_import = true
 disable_error_code = ["assignment", "import-untyped"]
 
 [tool.isort]

@@ -9,5 +9,5 @@ class Fuzzer:
 
     def run(self):
         print("Fuzzing 시작")
-        self.strategy.fuzz()
+        # self.strategy.fuzz()
         print("Fuzzing 종료")

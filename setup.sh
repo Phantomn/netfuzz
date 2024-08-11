@@ -46,11 +46,10 @@ ${PYTHON} -m venv -- ${NETFUZZ_VENV_PATH}
 source ${NETFUZZ_VENV_PATH}/bin/activate
 poetry install
 
-
 if uname | grep -iqs Linux; then
     distro=$(grep "^ID=" /etc/os-release | cut -d '=' -f2 | sed -e 's/"//g')
 
-    case $distro in 
+    case $distro in
         "ubuntu")
             install_apt
             ;;

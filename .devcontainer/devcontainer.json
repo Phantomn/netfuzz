@@ -35,8 +35,12 @@
                 },
                 "python.analysis.diagnosticMode": "workspace",
                 "python.analysis.typeCheckingMode": "strict",
+                "python.analysis.diagnosticSeverityOverrides": {
+                    "reportMissingImports": "none"
+                },
                 "python.languageServer": "Pylance",
                 "python.linting.pylintUseMinimalCheckers": false,
+                "python.defaultInterpreterPath": "/venv/bin/python",
                 "python.venvPath": "/venv",
                 "[python]": {
                     "editor.defaultFormatter": "charliermarsh.ruff",
@@ -59,7 +63,8 @@
     },
     "runArgs": [
         "--cap-add=SYS_PTRACE",
-        "-e", "TZ=Asia/Seoul"
+        "-e",
+        "TZ=Asia/Seoul"
     ],
     "remoteUser": "vscode",
     "workspaceFolder": "/netfuzz",
