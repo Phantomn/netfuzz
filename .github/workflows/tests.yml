@@ -38,7 +38,7 @@ jobs:
     - name: Run tests
       run: |
         source .venv/bin/activate
-        mkdir .cov
+        mkdir -p .cov
         ./tests.sh --cov
 
     - name: Process coverage data
