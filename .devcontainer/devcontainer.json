@@ -44,13 +44,6 @@
                     "reportMissingTypeStubs": "none"
                 },
                 "python.languageServer": "Pylance",
-                "python.linting.lintOnSave": true,
-                "python.linting.pylintUseMinimalCheckers": false,
-                "python.linting.enabled": true,
-                "python.linting.mypyEnabled": true,
-                "python.linting.mypyArgs": [
-                    "--ignore-missing-imports"
-                ],
                 "python.formatting.provider": "black",
                 "python.formatting.blackArgs": [
                     "--line-length=88"
@@ -59,15 +52,18 @@
                     "--profile",
                     "black"
                 ],
+                "mypy-type-checker.showNotifications": "always",
+                "mypy-type-checker.interpreter": [
+                    "/venv/bin/python"
+                ],
+                "mypy-type-checker.cwd": "${workspaceFolder}",
                 "python.defaultInterpreterPath": "/venv/bin/python",
                 "python.venvPath": "/venv",
-                "python.terminal.activateEnvironment": true,
-                "python.pixiToolPath": "/netfuzz",
+                "python.terminal.activateEnvironment": false,
                 "[python]": {
                     "editor.defaultFormatter": "charliermarsh.ruff",
                     "editor.codeActionsOnSave": {
-                        "source.fixAll.pylance": "explicit",
-                        "source.organizeImports": "explicit"
+                        "source.fixAll": "always"
                     },
                     "editor.formatOnType": true
                 },
@@ -82,7 +78,8 @@
                 "ms-python.vscode-pylance",
                 "ms-python.black-formatter",
                 "github.vscode-github-actions",
-                "mhutchie.git-graph"
+                "mhutchie.git-graph",
+                "ms-ceintl.vscode-language-pack-ko"
             ]
         }
     },
