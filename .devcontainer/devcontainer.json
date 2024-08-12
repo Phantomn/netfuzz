@@ -1,7 +1,7 @@
 {
     "name": "netfuzz",
     "build": {
-        "dockerFile": "../Dockerfile",
+        "dockerfile": "../Dockerfile",
         "context": "..",
         "args": {
             "LOW_PRIVILEGE_USER": "vscode"
