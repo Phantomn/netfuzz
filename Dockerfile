@@ -49,5 +49,7 @@ RUN ./setup-dev.sh
 ADD . /netfuzz/
 
 ARG LOW_PRIVILEGE_USER="vscode"
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PATH="~/.local/bin:${PATH}"
 
 ENV PATH="${NETFUZZ_VENV_PATH}/bin:${PATH}"
