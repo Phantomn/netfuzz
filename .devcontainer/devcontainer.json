@@ -1,8 +1,7 @@
 {
     "name": "netfuzz",
-    "dockerComposeFile": "../docker-compose.yml",
     "build": {
-        "dockerfile": "../Dockerfile",
+        "dockerFile": "../Dockerfile",
         "context": "..",
         "args": {
             "LOW_PRIVILEGE_USER": "vscode"
@@ -47,6 +46,11 @@
                 "python.languageServer": "Pylance",
                 "python.linting.lintOnSave": true,
                 "python.linting.pylintUseMinimalCheckers": false,
+                "python.linting.enabled": true,
+                "python.linting.mypyEnabled": true,
+                "python.linting.mypyArgs": [
+                    "--ignore-missing-imports"
+                ],
                 "python.formatting.provider": "black",
                 "python.formatting.blackArgs": [
                     "--line-length=88"
@@ -58,6 +62,7 @@
                 "python.defaultInterpreterPath": "/venv/bin/python",
                 "python.venvPath": "/venv",
                 "python.terminal.activateEnvironment": true,
+                "python.pixiToolPath": "/netfuzz",
                 "[python]": {
                     "editor.defaultFormatter": "charliermarsh.ruff",
                     "editor.codeActionsOnSave": {

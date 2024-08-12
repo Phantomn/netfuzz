@@ -59,8 +59,6 @@ install_apt() {
     if [[ "$1" != "" && "$1" != "20.04" ]]; then
         sudo apt install shfmt
     fi
-
-    command -v go &> /dev/null || sudo apt-get install -y golang
 }
 
 if uname | grep -iqs Linux; then

@@ -7,6 +7,7 @@ import sys
 from boofuzz import FuzzLoggerCsv
 from boofuzz import FuzzLoggerCurses
 from boofuzz import FuzzLoggerText
+from boofuzz import IFuzzLogger
 from boofuzz import Session
 from boofuzz import Target
 from boofuzz import TCPSocketConnection
@@ -18,22 +19,22 @@ from boofuzz.utils.process_monitor_local import ProcessMonitorLocal
 from netfuzz.protocols.ftp import FTP
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Network Protocol Fuzzer")
-    parser.add_argument("--target-host", required=True, help="IP address")
+    parser.add_argument("--target-host", required=True, type=str, help="IP address")
     parser.add_argument("--target-port", type=int, default=21, help="Port num")
-    parser.add_argument("--username", required=True, help="FTP username")
-    parser.add_argument("--password", required=True, help="FTP password")
-    parser.add_argument("--test-case-index", help="Test case index", type=str)
-    parser.add_argument("--test-case-name", help="Name of test case")
-    parser.add_argument("--csv-out", help="Output to CSV file")
+    parser.add_argument("--username", required=True, type=str, help="FTP username")
+    parser.add_argument("--password", required=True, type=str, help="FTP password")
+    parser.add_argument("--test-case-index", type=str, help="Test case index")
+    parser.add_argument("--test-case-name", type=str, help="Name of test case")
+    parser.add_argument("--csv-out", type=str, help="Output to CSV file")
     parser.add_argument(
         "--sleep-between-cases",
-        type=float,
+        type=int,
         default=0,
         help="Wait time between test cases",
     )
-    parser.add_argument("--procmon-host", help="Process monitor host or IP")
+    parser.add_argument("--procmon-host", type=str, help="Process monitor host or IP")
     parser.add_argument(
         "--procmon-port",
         type=int,
@@ -56,17 +57,19 @@ def parse_args():
     parser.add_argument(
         "target_cmdline",
         nargs=argparse.REMAINDER,
+        type=str,
         help="Target command line for process monitor",
     )
     return parser.parse_args()
 
 
-def handle_sigint(_signum, _frame):
-    print("CTRL+C Pressed, exiting...")
+def handle_sigint(signum: int, _frame: signal.Handlers) -> None:
+    signame = signal.Signals(signum).name
+    print(f"CTRL+C Pressed: {signame}, exiting...")
     sys.exit(0)
 
 
-def setup_process_monitor(args, crash_filename: str = "crashes"):
+def setup_process_monitor(args: argparse.Namespace, crash_filename: str = "crashes"):
     """
     Setup the process monitor based on the provided arguments.
     """
@@ -99,11 +102,11 @@ def setup_process_monitor(args, crash_filename: str = "crashes"):
     return procmon
 
 
-def setup_fuzz_loggers(args):
+def setup_fuzz_loggers(args: argparse.Namespace):
     """
     Setup the fuzz loggers based on the provided arguments.
     """
-    fuzz_loggers = []
+    fuzz_loggers: list[IFuzzLogger] = []
     if args.text_dump:
         fuzz_loggers.append(FuzzLoggerText())
     if args.tui:
@@ -115,19 +118,19 @@ def setup_fuzz_loggers(args):
     return fuzz_loggers
 
 
-def configure_session_indices(session, args):
+def configure_session_indices(session: Session, args: argparse.Namespace):
     """
     Configure the fuzzing session start and end indices based on arguments.
     """
-    start = None
-    end = None
-    fuzz_only_one_case = None
+    start: int = 0
+    end: int = 0
+    fuzz_only_one_case: int = 0
     if args.test_case_index is None:
         start = 1
     elif "-" in args.test_case_index:
         start, end = args.test_case_index.split("-")
         start = int(start) if start else 1
-        end = int(end) if end else None
+        end = int(end) if end else 0
     else:
         fuzz_only_one_case = int(args.test_case_index)
 
@@ -136,13 +139,13 @@ def configure_session_indices(session, args):
     return fuzz_only_one_case
 
 
-def run_fuzzing(session, args, fuzz_only_one_case):
+def run_fuzzing(session: Session, args: argparse.Namespace, fuzz_only_one_case: int):
     """
     Run the fuzzing session based on the provided arguments.
     """
     if args.feature_check:
         session.feature_check()
-    elif fuzz_only_one_case is not None:
+    elif fuzz_only_one_case is not 0:
         session.fuzz_single_case(mutant_index=fuzz_only_one_case)
     elif args.test_case_name is not None:
         session.fuzz_by_name(args.test_case_name)
