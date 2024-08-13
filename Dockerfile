@@ -42,7 +42,7 @@ RUN touch README.md && mkdir netfuzz && touch netfuzz/empty.py
 RUN DEBIAN_FRONTEND=noninteractive ./setup.sh
 
 # Cleanup dummy files
-RUN rm README.md && rm -rf netfuzz
+RUN rm -rf netfuzz README.md
 
 # Comment these lines if you won't run the tests.
 ADD ./setup-dev.sh /netfuzz/
