@@ -1,39 +1,7 @@
-version: "3.8"
-
 services:
-  base: &base-spec
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        IMAGE: mcr.microsoft.com/devcontainers/base:jammy
-    platform: linux/amd64
-    security_opt:
-      - seccomp:unconfined
-    cap_add:
-      - SYS_PTRACE
-    environment:
-      TZ: "Asia/Seoul"
-      LANGUAGE: "en_US.UTF-8"
-      LANG: "en_US.UTF-8"
-      LC_ALL: "en_US.UTF-8"
-      PIP_NO_CACHE_DIR: true
-      DEBIAN_FRONTEND: noninteractive
-      NETFUZZ_VENV_PATH: "/venv"
-
   main:
-    <<: *base-spec
-    volumes:
-      - .:/netfuzz
-
-  ubuntu22.04:
-    <<: *base-spec
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        IMAGE: ubuntu:22.04
-    environment:
-      PIP_NO_CACHE_DIR: true
-      DEBIAN_FRONTEND: noninteractive
-      NETFUZZ_VENV_PATH: "/venv"
+    volumes:
+      - .:/netfuzz:cached
