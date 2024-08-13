@@ -1,10 +1,9 @@
 {
     "name": "netfuzz",
-    "build": {
-        "args": {},
-        "context": "..",
-        "dockerfile": "../Dockerfile"
-    },
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "main",
     "features": {},
     "customizations": {
         "vscode": {

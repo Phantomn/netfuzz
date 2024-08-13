@@ -1,12 +1,17 @@
 version: "3.8"
 services:
   base: &base-spec
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        image: mcr.microsoft.com/devcontainers/base:jammy # 기본 이미지로 사용할 이미지 지정
     platform: linux/amd64
     security_opt:
       - seccomp:unconfined
     cap_add:
       - SYS_PTRACE
+
   main:
     <<: *base-spec
     volumes:
@@ -18,4 +23,4 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        image: ubuntu:22.04
+        image: ubuntu:22.04 # Ubuntu 22.04 이미지를 사용할 때
