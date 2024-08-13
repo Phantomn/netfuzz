@@ -65,6 +65,14 @@
                 "ruff.codeAction.fixViolation": {
                     "enable": true
                 },
+                "ruff.importStrategy": "useBundled",
+                "ruff.showNotifications": "always",
+                "ruff.organizeImports": true,
+                "ruff.showSyntaxErrors": true,
+                "ruff.logFile": "/netfuzz/.ruff.log",
+                "ruff.logLevel": "debug",
+                "ruff.trace.server": "messages",
+                "ruff.lint.run": "onSave",
                 "mypy-type-checker.cwd": "${workspaceFolder}",
                 "mypy-type-checker.interpreter": [
                     "/venv/bin/python"
