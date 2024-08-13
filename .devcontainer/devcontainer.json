@@ -70,23 +70,28 @@
                 "ruff.organizeImports": false
             },
             "extensions": [
+                "ms-python.python@2024.13.2024080901",
                 "charliermarsh.ruff",
                 "ms-azuretools.vscode-docker",
                 "ms-python.isort",
                 "ms-python.mypy-type-checker",
-                "ms-python.python",
                 "ms-python.vscode-pylance",
                 "ms-python.black-formatter",
                 "github.vscode-github-actions",
                 "mhutchie.git-graph",
-                "ms-ceintl.vscode-language-pack-ko"
+                "ms-ceintl.vscode-language-pack-ko",
+                "ms-vscode-remote.remote-containers"
             ]
         }
     },
     "runArgs": [
         "--cap-add=SYS_PTRACE",
         "-e",
-        "TZ=Asia/Seoul"
+        "TZ=Asia/Seoul",
+        "-e",
+        "LANG=en_US.UTF-8",
+        "-e",
+        "LC_ALL=en_US.UTF-8"
     ],
     "remoteUser": "vscode",
     "workspaceFolder": "/netfuzz",
