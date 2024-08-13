@@ -8,11 +8,12 @@ WORKDIR /netfuzz
 
 # 환경 변수 설정
 ENV PIP_NO_CACHE_DIR=true
+ENV NETFUZZ_VENV_PATH=/venv
 ENV LANGUAGE=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 ENV TZ=Asia/Seoul
-ENV NETFUZZ_VENV_PATH=/venv
+
 
 # 패키지 소스 변경 및 필수 패키지 설치
 RUN sed -i 's@archive.ubuntu.com@mirror.kakao.com@g' /etc/apt/sources.list && \
