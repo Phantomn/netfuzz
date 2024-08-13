@@ -14,15 +14,6 @@ class BooFtpException(Exception):
 
 class FTP(Strategy):
 	def __init__(self, username: str, password: str):
-		"""
-		Initialize FTP strategy with username and password.
-
-		Args:
-		    username (str): FTP username.
-		    password (str): FTP password.
-		    target_host (str): Target host for the FTP server.
-		    target_port (int): Target port for the FTP server.
-		"""
 		self.username = username
 		self.password = password
 		self.session = None

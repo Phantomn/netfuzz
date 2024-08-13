@@ -91,7 +91,8 @@
                 "m4ns0ur.base64",
                 "ms-azuretools.vscode-docker",
                 "github.vscode-github-actions",
-                "tamasfe.even-better-toml"
+                "tamasfe.even-better-toml",
+                "njpwerner.autodocstring"
             ]
         }
     },
