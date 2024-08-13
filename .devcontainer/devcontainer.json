@@ -77,7 +77,8 @@
                 "ms-python.black-formatter",
                 "ms-ceintl.vscode-language-pack-ko",
                 "mhutchie.git-graph",
-                "m4ns0ur.base64"
+                "m4ns0ur.base64",
+                "ms-azuretools.vscode-docker"
             ]
         }
     },

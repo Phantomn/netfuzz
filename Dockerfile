@@ -26,8 +26,7 @@ RUN sed -i 's@security.ubuntu.com@mirror.kakao.com@g' /etc/apt/sources.list
 RUN apt-get update -y && apt-get install -y --no-install-recommends locales vim && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone \
-    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8 \
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && update-locale LANG=en_US.UTF-8 && \
     rm -rf /var/lib/apt/lists/*
 
 # Add necessary files
@@ -51,7 +50,5 @@ RUN ./setup-dev.sh
 ADD . /netfuzz/
 
 ARG LOW_PRIVILEGE_USER="vscode"
-RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="~/.local/bin:${PATH}"
 
 ENV PATH="${NETFUZZ_VENV_PATH}/bin:${PATH}"
