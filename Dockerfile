@@ -14,6 +14,7 @@ FROM $image
 WORKDIR /netfuzz
 
 ENV PIP_NO_CACHE_DIR=true
+ENV LANGUAGE=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 ENV TZ=Asia/Seoul
@@ -26,7 +27,7 @@ RUN sed -i 's@security.ubuntu.com@mirror.kakao.com@g' /etc/apt/sources.list
 RUN apt-get update -y && apt-get install -y --no-install-recommends locales vim
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone \
-    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && update-locale LANG=en_US.UTF-8
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8
 RUN rm -rf /var/lib/apt/lists/*
 
 # Add necessary files
