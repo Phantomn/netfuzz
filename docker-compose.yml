@@ -1,16 +1,25 @@
 version: "3.8"
+
 services:
   base: &base-spec
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        image: mcr.microsoft.com/devcontainers/base:jammy # 기본 이미지로 사용할 이미지 지정
+        IMAGE: mcr.microsoft.com/devcontainers/base:jammy
     platform: linux/amd64
     security_opt:
       - seccomp:unconfined
     cap_add:
       - SYS_PTRACE
+    environment:
+      TZ: "Asia/Seoul"
+      LANGUAGE: "en_US.UTF-8"
+      LANG: "en_US.UTF-8"
+      LC_ALL: "en_US.UTF-8"
+      PIP_NO_CACHE_DIR: true
+      DEBIAN_FRONTEND: noninteractive
+      NETFUZZ_VENV_PATH: "/venv"
 
   main:
     <<: *base-spec
@@ -23,4 +32,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        image: ubuntu:22.04 # Ubuntu 22.04 이미지를 사용할 때
+        IMAGE: ubuntu:22.04
+    environment:
+      PIP_NO_CACHE_DIR: true
+      DEBIAN_FRONTEND: noninteractive
+      NETFUZZ_VENV_PATH: "/venv"
