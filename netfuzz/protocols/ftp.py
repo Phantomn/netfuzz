@@ -198,7 +198,6 @@ class FTP(Strategy):
 
         start = None
         end = None
-        fuzz_only_one_case = None
         if test_case_index is None:
             start = 1
         elif "-" in test_case_index:
@@ -212,11 +211,11 @@ class FTP(Strategy):
             else:
                 end = int(end)
         else:
-            fuzz_only_one_case = int(test_case_index)
+            int(test_case_index)
 
         connection = TCPSocketConnection(target_host, target_port)
 
-        session = Session(
+        Session(
             target=Target(
                 connection=connection,
                 monitors=monitors,

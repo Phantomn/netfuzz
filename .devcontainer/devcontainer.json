@@ -42,20 +42,11 @@
                 "python.languageServer": "Pylance",
                 "python.formatting.provider": "black",
                 "python.formatting.blackArgs": [
-                    "--line-length=88"
+                    "--line-length=100"
                 ],
                 "python.sortImports.args": [
                     "--profile",
                     "black"
-                ],
-                "mypy-type-checker.showNotifications": "always",
-                "mypy-type-checker.interpreter": [
-                    "/venv/bin/python"
-                ],
-                "mypy-type-checker.cwd": "${workspaceFolder}",
-                "mypy-type-checker.ignorePatterns": [
-                    "**/site-packages/**/*.py",
-                    ".vscode/*.py"
                 ],
                 "python.defaultInterpreterPath": "/venv/bin/python",
                 "python.venvPath": "/venv",
@@ -63,11 +54,18 @@
                 "[python]": {
                     "editor.defaultFormatter": "charliermarsh.ruff",
                     "editor.codeActionsOnSave": {
-                        "source.fixAll": "always"
+                        "source.fixAll": true
                     },
                     "editor.formatOnType": true
                 },
-                "ruff.organizeImports": false
+                "ruff.codeAction.fixViolation": {
+                    "enable": true
+                },
+                "mypy-type-checker.cwd": "${workspaceFolder}",
+                "mypy-type-checker.interpreter": [
+                    "/venv/bin/python"
+                ],
+                "mypy-type-checker.showNotifications": "always"
             },
             "extensions": [
                 "ms-python.python@2024.13.2024080901",
@@ -79,7 +77,9 @@
                 "ms-ceintl.vscode-language-pack-ko",
                 "mhutchie.git-graph",
                 "m4ns0ur.base64",
-                "ms-azuretools.vscode-docker"
+                "ms-azuretools.vscode-docker",
+                "github.vscode-github-actions",
+                "tamasfe.even-better-toml"
             ]
         }
     },

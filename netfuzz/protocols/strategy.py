@@ -3,6 +3,8 @@ from __future__ import annotations
 from abc import ABC
 from abc import abstractmethod
 
+from boofuzz import Session
+
 
 class Strategy(ABC):
     """
@@ -20,7 +22,7 @@ class Strategy(ABC):
         """
 
     @abstractmethod
-    def setup_session(self):
+    def setup_session(self, session: Session):
         """
         Set up the protocol commands and establish connections.
 
