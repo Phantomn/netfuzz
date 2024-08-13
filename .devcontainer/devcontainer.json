@@ -13,7 +13,9 @@
         "vscode": {
             "settings": {
                 "terminal.integrated.env.linux": {
-                    "TZ": "Asia/Seoul"
+                    "TZ": "Asia/Seoul",
+                    "LANG": "en_US.UTF-8",
+                    "LC_ALL": "en_US.UTF-8"
                 },
                 "docker.languageserver.formatter.ignoreMultilineInstructions": true,
                 "editor.bracketPairColorization.enabled": true,
@@ -57,6 +59,10 @@
                     "/venv/bin/python"
                 ],
                 "mypy-type-checker.cwd": "${workspaceFolder}",
+                "mypy-type-checker.ignorePatterns": [
+                    "**/site-packages/**/*.py",
+                    ".vscode/*.py"
+                ],
                 "python.defaultInterpreterPath": "/venv/bin/python",
                 "python.venvPath": "/venv",
                 "python.terminal.activateEnvironment": false,
@@ -79,8 +85,7 @@
                 "ms-python.black-formatter",
                 "github.vscode-github-actions",
                 "mhutchie.git-graph",
-                "ms-ceintl.vscode-language-pack-ko",
-                "ms-vscode-remote.remote-containers"
+                "ms-ceintl.vscode-language-pack-ko"
             ]
         }
     },
