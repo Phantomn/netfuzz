@@ -1,6 +1,13 @@
 {
     "name": "netfuzz",
-    "image": "ghcr.io/phantomn/netfuzz:base",
+    "build": {
+        "dockerfile": "../Dockerfile",
+        "context": "..",
+        "args": {
+            "LOW_PRIVILEGE_USER": "vscode"
+        },
+        "platform": "linux/amd64"
+    },
     "features": {},
     "customizations": {
         "vscode": {
