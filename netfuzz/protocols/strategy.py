@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from boofuzz import Session
+
+class BooFtpException(Exception):
+	pass
 
 
 class Strategy(ABC):
@@ -12,37 +14,28 @@ class Strategy(ABC):
 
 	@abstractmethod
 	def __init__(self, username: str, password: str):
-		"""
-		Initialize the protocol strategy with necessary credentials.
-
-		Args:
-		    username (str): Username for the protocol.
-		    password (str): Password for the protocol.
-		"""
+		pass
 
 	@abstractmethod
-	def setup_session(self, session: Session):
-		"""
-		Set up the protocol commands and establish connections.
-
-		Args:
-		    session (Session): The fuzzing session object.
-		"""
+	def setup_session(self):
+		pass
 
 	@abstractmethod
-	def check_reply_code(
-		self, target, fuzz_data_logger, session, test_case_context, *args, **kwargs
-	):
-		"""
-		Callback function to check the reply code from the server.
-
-		Args:
-			target: The target with a socket-like interface.
-		    fuzz_data_logger: Logger for logging fuzzing data.
-		    session: The fuzzing session object.
-			test_case_context: Context for the test case.
-		"""
+	def check_reply_code(self):
+		if test_case_context.previous_message.name == "__ROOT_NODE__":
+			return
+		else:
+			try:
+				fuzz_data_logger.log_info("Parsing reply contents: {0}".format(session.last_recv))
+				parse_ftp_reply(session.last_recv)
+			except BooFtpException as e:
+				fuzz_data_logger.log_fail(str(e))
+			fuzz_data_logger.log_pass()
 
 	@abstractmethod
-	def fuzz(self) -> None:
-		""" """
+	def parse_ftp_reply(self):
+		pass
+
+	@abstractmethod
+	def fuzz(self):
+		pass

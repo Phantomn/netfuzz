@@ -8,10 +8,6 @@ from boofuzz import Delim, IFuzzLogger, ProtocolSession, Request, Session, Stati
 from netfuzz.protocols.strategy import Strategy
 
 
-class BooFtpException(Exception):
-	pass
-
-
 class FTP(Strategy):
 	def __init__(self, username: str, password: str):
 		self.username = username

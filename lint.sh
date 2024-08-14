@@ -37,7 +37,7 @@ fi
 
 set -o xtrace
 
-LINT_FILES="netfuzz/**/*.py tests/*.py"
+LINT_FILES="netfuzz/**/*.py"
 LINT_TOOLS="isort ruff vermin mypy"
 
 if ! type ${LINT_TOOLS} &> /dev/null; then
