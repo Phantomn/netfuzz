@@ -4,15 +4,13 @@ import argparse
 import signal
 import sys
 
-from boofuzz import (
-	FuzzLoggerCsv,
-	FuzzLoggerCurses,
-	FuzzLoggerText,
-	IFuzzLogger,
-	Session,
-	Target,
-	TCPSocketConnection,
-)
+from boofuzz import FuzzLoggerCsv
+from boofuzz import FuzzLoggerCurses
+from boofuzz import FuzzLoggerText
+from boofuzz import IFuzzLogger
+from boofuzz import Session
+from boofuzz import Target
+from boofuzz import TCPSocketConnection
 from boofuzz.constants import DEFAULT_PROCMON_PORT
 from boofuzz.monitors import ProcessMonitor
 from boofuzz.utils.debugger_thread_simple import DebuggerThreadSimple
@@ -49,7 +47,7 @@ def parse_args() -> argparse.Namespace:
 		"--feature-check", action="store_true", help="Run a feature check instead of a fuzz test"
 	)
 	parser.add_argument(
-		"target_cmdline",
+		"--target_cmdline",
 		nargs=argparse.REMAINDER,
 		type=str,
 		help="Target command line for process monitor",
@@ -63,10 +61,7 @@ def handle_sigint(signum: int, _frame: signal.Handlers) -> None:
 	sys.exit(0)
 
 
-def setup_process_monitor(args: argparse.Namespace, crash_filename: str = "crashes"):
-	"""
-	Setup the process monitor based on the provided arguments.
-	"""
+def setup_process_monitor(args, crash_filename: str = "crashes"):
 	if len(args.target_cmdline) > 0 and args.procmon_host is None:
 		procmon = ProcessMonitorLocal(
 			crash_filename=crash_filename,
