@@ -7,6 +7,10 @@ class Fuzzer:
 	def __init__(self, strategy: Strategy):
 		self.strategy = strategy
 
+	def setup(self):
+		print("Setting session...")
+		self.strategy.setup_session()
+
 	def run(self):
 		print("Fuzzing 시작")
 		self.strategy.fuzz()

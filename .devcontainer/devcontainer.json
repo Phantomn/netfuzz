@@ -40,6 +40,10 @@
                     "**/.venv/**": true,
                     "**/__pycache__/**": true
                 },
+                "python.analysis.autoFormatStrings": true,
+                "python.analysis.autoImportCompletions": true,
+                "python.analysis.autoIndent": true,
+                "python.analysis.autoSearchPaths": true,
                 "python.analysis.diagnosticMode": "workspace",
                 "python.analysis.typeCheckingMode": "strict",
                 "python.analysis.reportExtraTelemetry": true,
@@ -58,6 +62,7 @@
                 ],
                 "python.defaultInterpreterPath": "/venv/bin/python",
                 "python.venvPath": "/venv",
+                "python.poetryPath": "/venv/bin/poetry",
                 "python.terminal.activateEnvironment": false,
                 "[python]": {
                     "editor.defaultFormatter": "charliermarsh.ruff",

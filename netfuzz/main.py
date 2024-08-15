@@ -63,10 +63,7 @@ def handle_sigint(signum: int, _frame: signal.Handlers) -> None:
 	sys.exit(0)
 
 
-def setup_process_monitor(args: argparse.Namespace, crash_filename: str = "crashes"):
-	"""
-	Setup the process monitor based on the provided arguments.
-	"""
+def setup_process_monitor(args, crash_filename):
 	if len(args.target_cmdline) > 0 and args.procmon_host is None:
 		procmon = ProcessMonitorLocal(
 			crash_filename=crash_filename,
@@ -147,8 +144,8 @@ def run_fuzzing(session: Session, args: argparse.Namespace, fuzz_only_one_case: 
 		session.fuzz()
 
 
-def main():
-	signal.signal(signal.SIGINT, handle_sigint)  # Register signal handler for CTRL+C
+def main() -> None:
+	signal.signal(signal.SIGINT, handle_sigint)
 
 	args = parse_args()
 
