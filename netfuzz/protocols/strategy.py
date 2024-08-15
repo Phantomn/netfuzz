@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from typing import Any, Dict, Tuple
+
+from boofuzz import IFuzzLogger, ProtocolSession, Session, Target
 
 
 class BooFtpException(Exception):
@@ -17,25 +20,25 @@ class Strategy(ABC):
 		pass
 
 	@abstractmethod
-	def setup_session(self):
+	def setup_session(self) -> None:
 		pass
 
 	@abstractmethod
-	def check_reply_code(self):
-		if test_case_context.previous_message.name == "__ROOT_NODE__":
-			return
-		else:
-			try:
-				fuzz_data_logger.log_info("Parsing reply contents: {0}".format(session.last_recv))
-				parse_ftp_reply(session.last_recv)
-			except BooFtpException as e:
-				fuzz_data_logger.log_fail(str(e))
-			fuzz_data_logger.log_pass()
-
-	@abstractmethod
-	def parse_ftp_reply(self):
+	def check_reply_code(
+		self,
+		target: Target,
+		fuzz_data_logger: IFuzzLogger,
+		session: Session,
+		test_case_context: ProtocolSession,
+		*args: Tuple[Any, ...],
+		**kwargs: Dict[str, Any],
+	) -> None:
 		pass
 
 	@abstractmethod
-	def fuzz(self):
+	def parse_ftp_reply(self, data: bytes) -> str:
+		pass
+
+	@abstractmethod
+	def fuzz(self) -> None:
 		pass

@@ -4,13 +4,15 @@ import argparse
 import signal
 import sys
 
-from boofuzz import FuzzLoggerCsv
-from boofuzz import FuzzLoggerCurses
-from boofuzz import FuzzLoggerText
-from boofuzz import IFuzzLogger
-from boofuzz import Session
-from boofuzz import Target
-from boofuzz import TCPSocketConnection
+from boofuzz import (
+	FuzzLoggerCsv,
+	FuzzLoggerCurses,
+	FuzzLoggerText,
+	IFuzzLogger,
+	Session,
+	Target,
+	TCPSocketConnection,
+)
 from boofuzz.constants import DEFAULT_PROCMON_PORT
 from boofuzz.monitors import ProcessMonitor
 from boofuzz.utils.debugger_thread_simple import DebuggerThreadSimple
@@ -61,7 +63,7 @@ def handle_sigint(signum: int, _frame: signal.Handlers) -> None:
 	sys.exit(0)
 
 
-def setup_process_monitor(args, crash_filename: str = "crashes"):
+def setup_process_monitor(args, crash_filename):
 	if len(args.target_cmdline) > 0 and args.procmon_host is None:
 		procmon = ProcessMonitorLocal(
 			crash_filename=crash_filename,
@@ -142,8 +144,8 @@ def run_fuzzing(session: Session, args: argparse.Namespace, fuzz_only_one_case: 
 		session.fuzz()
 
 
-def main():
-	signal.signal(signal.SIGINT, handle_sigint)  # Register signal handler for CTRL+C
+def main() -> None:
+	signal.signal(signal.SIGINT, handle_sigint)
 
 	args = parse_args()
 
