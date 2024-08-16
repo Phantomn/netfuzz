@@ -20,7 +20,7 @@ class Strategy(ABC):
 		pass
 
 	@abstractmethod
-	def setup_session(self) -> None:
+	def setup_session(self, session: Session) -> None:
 		pass
 
 	@abstractmethod
