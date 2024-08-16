@@ -49,7 +49,7 @@ def parse_args() -> argparse.Namespace:
 		"--feature-check", action="store_true", help="Run a feature check instead of a fuzz test"
 	)
 	parser.add_argument(
-		"target_cmdline",
+		"--target_cmdline",
 		nargs=argparse.REMAINDER,
 		type=str,
 		help="Target command line for process monitor",
