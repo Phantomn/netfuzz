@@ -1,45 +1,44 @@
 from __future__ import annotations
 
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
+from typing import Any, Dict, Tuple
 
-from boofuzz import Session
+from boofuzz import IFuzzLogger, ProtocolSession, Session, Target
+
+
+class BooFtpException(Exception):
+	pass
 
 
 class Strategy(ABC):
-    """
-    Abstract base class for protocol fuzzing strategies.
-    """
+	"""
+	Abstract base class for protocol fuzzing strategies.
+	"""
 
-    @abstractmethod
-    def __init__(self, username: str, password: str):
-        """
-        Initialize the protocol strategy with necessary credentials.
+	@abstractmethod
+	def __init__(self, username: str, password: str):
+		pass
 
-        Args:
-            username (str): Username for the protocol.
-            password (str): Password for the protocol.
-        """
+	@abstractmethod
+	def setup_session(self, session: Session) -> None:
+		pass
 
-    @abstractmethod
-    def setup_session(self, session: Session):
-        """
-        Set up the protocol commands and establish connections.
+	@abstractmethod
+	def check_reply_code(
+		self,
+		target: Target,
+		fuzz_data_logger: IFuzzLogger,
+		session: Session,
+		test_case_context: ProtocolSession,
+		*args: Tuple[Any, ...],
+		**kwargs: Dict[str, Any],
+	) -> None:
+		pass
 
-        Args:
-            session (Session): The fuzzing session object.
-        """
+	@abstractmethod
+	def parse_ftp_reply(self, data: bytes) -> str:
+		pass
 
-    @abstractmethod
-    def check_reply_code(
-        self, target, fuzz_data_logger, session, test_case_context, *args, **kwargs
-    ):
-        """
-        Callback function to check the reply code from the server.
-
-        Args:
-            target: The target with a socket-like interface.
-            fuzz_data_logger: Logger for logging fuzzing data.
-            session: The fuzzing session object.
-            test_case_context: Context for the test case.
-        """
+	@abstractmethod
+	def fuzz(self) -> None:
+		pass

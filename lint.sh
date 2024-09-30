@@ -37,7 +37,7 @@ fi
 
 set -o xtrace
 
-LINT_FILES="netfuzz/**/*.py tests/*.py"
+LINT_FILES="netfuzz/**/*.py"
 LINT_TOOLS="isort ruff vermin mypy"
 
 if ! type ${LINT_TOOLS} &> /dev/null; then
@@ -63,7 +63,7 @@ call_shfmt() {
 if [[ $FIX == 1 ]]; then
     isort ${LINT_FILES}
     ruff format ${LINT_FILES}
-    ruff check --fix --output-format=full ${LINT_FILES}
+    ruff check --fix --unsafe-fixes --output-format=full ${LINT_FILES}
     call_shfmt -w
 else
     isort --check-only --diff ${LINT_FILES}

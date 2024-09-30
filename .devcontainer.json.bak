@@ -1,13 +1,12 @@
 {
     "name": "netfuzz",
-    /*"dockerComposeFile": [
-        "../docker-compose.yml"
-    ],
-    "service": "main",*/
     "build": {
-        "args": {},
+        "dockerfile": "../Dockerfile",
         "context": "..",
-        "dockerfile": "../Dockerfile"
+        "args": {
+            "LOW_PRIVILEGE_USER": "vscode"
+        },
+        "platform": "linux/amd64"
     },
     "features": {},
     "customizations": {
@@ -15,7 +14,6 @@
             "settings": {
                 "terminal.integrated.env.linux": {
                     "TZ": "Asia/Seoul",
-                    "LANGUAGE": "en_US.UTF-8",
                     "LANG": "en_US.UTF-8",
                     "LC_ALL": "en_US.UTF-8"
                 },
@@ -40,10 +38,6 @@
                     "**/.venv/**": true,
                     "**/__pycache__/**": true
                 },
-                "python.analysis.autoFormatStrings": true,
-                "python.analysis.autoImportCompletions": true,
-                "python.analysis.autoIndent": true,
-                "python.analysis.autoSearchPaths": true,
                 "python.analysis.diagnosticMode": "workspace",
                 "python.analysis.typeCheckingMode": "strict",
                 "python.analysis.reportExtraTelemetry": true,
@@ -54,15 +48,23 @@
                 "python.languageServer": "Pylance",
                 "python.formatting.provider": "black",
                 "python.formatting.blackArgs": [
-                    "--line-length=100"
+                    "--line-length=88"
                 ],
                 "python.sortImports.args": [
                     "--profile",
                     "black"
                 ],
+                "mypy-type-checker.showNotifications": "always",
+                "mypy-type-checker.interpreter": [
+                    "/venv/bin/python"
+                ],
+                "mypy-type-checker.cwd": "${workspaceFolder}",
+                "mypy-type-checker.ignorePatterns": [
+                    "**/site-packages/**/*.py",
+                    ".vscode/*.py"
+                ],
                 "python.defaultInterpreterPath": "/venv/bin/python",
                 "python.venvPath": "/venv",
-                "python.poetryPath": "/venv/bin/poetry",
                 "python.terminal.activateEnvironment": false,
                 "[python]": {
                     "editor.defaultFormatter": "charliermarsh.ruff",
@@ -71,25 +73,10 @@
                     },
                     "editor.formatOnType": true
                 },
-                "ruff.codeAction.fixViolation": {
-                    "enable": true
-                },
-                "ruff.importStrategy": "useBundled",
-                "ruff.showNotifications": "always",
-                "ruff.organizeImports": true,
-                "ruff.showSyntaxErrors": true,
-                "ruff.logFile": "/netfuzz/.ruff.log",
-                "ruff.logLevel": "debug",
-                "ruff.trace.server": "messages",
-                "ruff.lint.run": "onSave",
-                "mypy-type-checker.cwd": "${workspaceFolder}",
-                "mypy-type-checker.interpreter": [
-                    "/venv/bin/python"
-                ],
-                "mypy-type-checker.showNotifications": "always"
+                "ruff.organizeImports": false
             },
             "extensions": [
-                "ms-python.python@2024.13.2024081501",
+                "ms-python.python@2024.13.2024080901",
                 "charliermarsh.ruff",
                 "ms-python.isort",
                 "ms-python.mypy-type-checker",
@@ -97,12 +84,7 @@
                 "ms-python.black-formatter",
                 "ms-ceintl.vscode-language-pack-ko",
                 "mhutchie.git-graph",
-                "m4ns0ur.base64",
-                "ms-azuretools.vscode-docker",
-                "github.vscode-github-actions",
-                "tamasfe.even-better-toml",
-                "njpwerner.autodocstring",
-                "ms-python.python"
+                "m4ns0ur.base64"
             ]
         }
     },
