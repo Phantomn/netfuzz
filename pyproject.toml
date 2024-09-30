@@ -1,27 +1,19 @@
 [tool.ruff]
-line-length = 100
+line-length = 188
 
 [tool.ruff.lint]
-ignore = [
-    "A003",
-    "E402",
-    "E501",
-    "E731",
-    "F405",
-    "F821",
-    "W505",
-]
+ignore = ["A003", "E402", "E501", "E731", "F405", "F821", "W505"]
 
 select = [
-    "A",  # flake8-builtins
-    "E",  # pycodestyle
-    "F",  # pyflakes
-    "W",  # pycodestyle
-    "C4", # flake8-comprehensions
-    "ISC", # flake8-implicit-str-concat
-    "SLOT", # flake8-slots
-    "FLY", # flynt
-    "PGH", # pygrep-hooks
+    "A",      # flake8-builtins
+    "E",      # pycodestyle
+    "F",      # pyflakes
+    "W",      # pycodestyle
+    "C4",     # flake8-comprehensions
+    "ISC",    # flake8-implicit-str-concat
+    "SLOT",   # flake8-slots
+    "FLY",    # flynt
+    "PGH",    # pygrep-hooks
     "RET506", # flake8-return: superfluous-else-raise
     "RET507", # flake8-return: superfluous-else-continue
     "RET508", # flake8-return: superfluous-else-break
@@ -92,9 +84,7 @@ version = "1.0.1"
 description = "Network Protocol Fuzzer with boofuzz"
 authors = ["Phantomn <tmdvyr123@gmail.com>"]
 readme = "README.md"
-packages = [
-    { include = "netfuzz" },
-]
+packages = [{ include = "netfuzz" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -129,4 +119,3 @@ pymdown-extensions = "^10.9"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-package-mode = true

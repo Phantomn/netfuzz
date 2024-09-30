@@ -34,10 +34,11 @@
                     "**/__pycache__/**": true
                 },
                 "python.analysis.diagnosticMode": "workspace",
-                "python.analysis.typeCheckingMode": "strict",
+                "python.analysis.typeCheckingMode": "basic",
                 "python.analysis.diagnosticSeverityOverrides": {
                     "reportMissingImports": "none",
-                    "reportMissingTypeStubs": "none"
+                    "reportMissingTypeStubs": "none",
+                    "reportMissingParameterType": "none"
                 },
                 "python.languageServer": "Pylance",
                 "python.linting.pylintUseMinimalCheckers": false,
@@ -56,9 +57,9 @@
                 "charliermarsh.ruff",
                 "ms-azuretools.vscode-docker",
                 "ms-python.isort",
-                "ms-python.mypy-type-checker",
                 "ms-python.python",
-                "ms-python.vscode-pylance"
+                "ms-python.vscode-pylance",
+                "tamasfe.even-better-toml"
             ]
         }
     },
