@@ -1,5 +1,5 @@
 from __future__ import annotations
 
-from . import fuzzer
+from netfuzz.core import base, engine
 
-__all__ = ["fuzzer"]
+__all__ = ["base", "engine"]
