@@ -10,7 +10,10 @@
         "vscode": {
             "settings": {
                 "terminal.integrated.env.linux": {
-                    "TZ": "Asia/Seoul"
+                    "TZ": "Asia/Seoul",
+                    "LANGUAGE": "en_US.UTF-8",
+                    "LANG": "en_US.UTF-8",
+                    "LC_ALL": "en_US.UTF-8"
                 },
                 "docker.languageserver.formatter.ignoreMultilineInstructions": true,
                 "editor.bracketPairColorization.enabled": true,
@@ -33,6 +36,10 @@
                     "**/.venv/**": true,
                     "**/__pycache__/**": true
                 },
+                "python.analysis.autoFormatStrings": true,
+                "python.analysis.autoImportCompletions": true,
+                "python.analysis.autoIndent": true,
+                "python.analysis.autoSearchPaths": true,
                 "python.analysis.diagnosticMode": "workspace",
                 "python.analysis.typeCheckingMode": "basic",
                 "python.analysis.diagnosticSeverityOverrides": {
@@ -41,21 +48,45 @@
                     "reportMissingParameterType": "none"
                 },
                 "python.languageServer": "Pylance",
-                "python.linting.pylintUseMinimalCheckers": false,
+                "python.formatting.provider": "black",
+                "python.formatting.blackArgs": [
+                    "--line-length=188"
+                ],
+                "python.sortImports.args": [
+                    "--profile",
+                    "black"
+                ],
                 "python.defaultInterpreterPath": "/venv/bin/python",
                 "python.venvPath": "/venv",
+                "python.poetryPath": "/venv/bin/poetry",
+                "python.terminal.activateEnvironment": false,
                 "[python]": {
                     "editor.defaultFormatter": "charliermarsh.ruff",
                     "editor.codeActionsOnSave": {
-                        "source.organizeImports": "explicit"
+                        "source.fixAll": "always"
                     },
                     "editor.formatOnType": true
                 },
-                "ruff.organizeImports": false
+                "ruff.codeAction.fixViolation": {
+                    "enable": true
+                },
+                "ruff.importStrategy": "useBundled",
+                "ruff.showNotifications": "always",
+                "ruff.organizeImports": true,
+                "ruff.showSyntaxErrors": true,
+                "ruff.logFile": "/netfuzz/.ruff.log",
+                "ruff.logLevel": "debug",
+                "ruff.trace.server": "messages",
+                "ruff.lint.run": "onSave",
+                "mypy-type-checker.cwd": "${workspaceFolder}",
+                "mypy-type-checker.interpreter": [
+                    "/venv/bin/python"
+                ],
+                "mypy-type-checker.showNotifications": "always"
             },
             "extensions": [
+                "ms-python.python",
                 "charliermarsh.ruff",
-                "ms-azuretools.vscode-docker",
                 "ms-python.isort",
                 "ms-python.python",
                 "ms-python.vscode-pylance",
@@ -66,7 +97,11 @@
     "runArgs": [
         "--cap-add=SYS_PTRACE",
         "-e",
-        "TZ=Asia/Seoul"
+        "TZ=Asia/Seoul",
+        "-e",
+        "LANG=en_US.UTF-8",
+        "-e",
+        "LC_ALL=en_US.UTF-8"
     ],
     "remoteUser": "vscode",
     "workspaceFolder": "/netfuzz",

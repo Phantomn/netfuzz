@@ -1,5 +1,6 @@
 [virtualenvs]
 in-project = true
+path = "/venv"
 
 [keyring]
 enabled = true
