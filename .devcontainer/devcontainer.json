@@ -92,13 +92,13 @@
                 "ms-python.python",
                 "charliermarsh.ruff",
                 "ms-python.isort",
-                //"ms-python.mypy-type-checker",
                 "ms-python.vscode-pylance",
                 "ms-python.black-formatter",
                 "ms-ceintl.vscode-language-pack-ko",
                 "mhutchie.git-graph",
                 "m4ns0ur.base64",
-                "tamasfe.even-better-toml"
+                "tamasfe.even-better-toml",
+                "alexcvzz.vscode-sqlite"
             ]
         }
     },
