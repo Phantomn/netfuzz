@@ -42,6 +42,7 @@
                 "python.analysis.autoSearchPaths": true,
                 "python.analysis.diagnosticMode": "workspace",
                 "python.analysis.typeCheckingMode": "basic",
+                "python.analysis.reportExtraTelemetry": true,
                 "python.analysis.diagnosticSeverityOverrides": {
                     "reportMissingImports": "none",
                     "reportMissingTypeStubs": "none",
@@ -88,9 +89,13 @@
                 "ms-python.python",
                 "charliermarsh.ruff",
                 "ms-python.isort",
-                "ms-python.python",
                 "ms-python.vscode-pylance",
-                "tamasfe.even-better-toml"
+                "ms-python.black-formatter",
+                "ms-ceintl.vscode-language-pack-ko",
+                "mhutchie.git-graph",
+                "m4ns0ur.base64",
+                "tamasfe.even-better-toml",
+                "alexcvzz.vscode-sqlite"
             ]
         }
     },
