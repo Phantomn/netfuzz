@@ -42,29 +42,46 @@ class Engine:
 			sleep_time=kwargs.get("sleep_between_cases", 0.0),
 			index_start=index_start,
 			index_end=kwargs.get("test_case_name", None),
+			reuse_target_connection=True,
 		)
 
 	def setup_monitors(self, kwargs):
 		monitors = []
 		local_procmon = None
 
-		if kwargs["target_cmdline"] and kwargs["procmon_host"] is None:
+		if len(kwargs["target_cmdline"]) > 0 and kwargs["procmon_host"] is None:
 			local_procmon = ProcessMonitorLocal(
 				crash_filename="boofuzz-crash-bin",
 				proc_name=None,
 				pid_to_ignore=None,
 				debugger_class=DebuggerThreadSimple,
-				level=1,
+				level=10,
 			)
-			local_procmon.set_options(start_commands=kwargs["target_cmdline"].split())
-			monitors.append(local_procmon)
 
-		if kwargs["procmon_host"]:
-			procmon = ProcessMonitor(kwargs["procmon_host"], kwargs["procmon_port"])
-			procmon.set_options(
-				start_commands=[kwargs["procmon_start"]], capture_output=kwargs["procmon_capture"]
-			)
+		if isinstance(kwargs["target_cmdline"], list):
+			kwargs["target_cmdline"] = " ".join(kwargs["target_cmdline"])
+
+		print(f"DEBUG: target_cmdline = {kwargs['target_cmdline']}")
+
+		procmon_options = {}
+		if kwargs["procmon_start"] is not None:
+			procmon_options["start_commands"] = kwargs["procmon_start"].split(" ")
+		if kwargs["target_cmdline"] is not None:
+			procmon_options["start_commands"] = [kwargs["target_cmdline"].split(" ")]
+		if kwargs["procmon_capture"]:
+			procmon_options["capture_output"] = True
+
+		if local_procmon is not None or kwargs["procmon_host"] is not None:
+			if kwargs["procmon_host"] is not None:
+				procmon = ProcessMonitor(kwargs["procmon_host"], kwargs["procmon_port"])
+			else:
+				procmon = local_procmon
+
+			procmon.set_options(**procmon_options)  # type: ignore
 			monitors.append(procmon)
+		else:
+			procmon = None
+			monitors = []
 
 		return monitors
 
