@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from . import core
-from . import main
-from . import protocols
+from netfuzz import core
+from netfuzz import main
+from netfuzz import protocol
 
-__all__ = ["core", "main", "protocols"]
+__all__ = ["core", "main", "protocol"]
