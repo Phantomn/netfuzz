@@ -63,7 +63,7 @@
                 "python.defaultInterpreterPath": "/venv/bin/python",
                 "python.venvPath": "/venv",
                 "python.poetryPath": "/venv/bin/poetry",
-                "python.terminal.activateEnvironment": false,
+                "python.terminal.activateEnvironment": true,
                 "[python]": {
                     "editor.defaultFormatter": "charliermarsh.ruff",
                     "editor.codeActionsOnSave": {

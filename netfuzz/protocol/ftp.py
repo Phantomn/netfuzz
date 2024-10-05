@@ -3,9 +3,59 @@ from __future__ import annotations
 import os
 from typing import Optional
 
-from boofuzz import Block, Delim, Request, Static, String
+from boofuzz import Block, Delim, Request, Session, Static, String
+from pyradamsa import Radamsa
 
 from netfuzz.core.base import Base
+
+
+class State:
+	def __init__(self) -> None:
+		self.state = "INITIAL"
+		self.rules = {
+			# 초기 상태에서 USER 명령어로만 전이
+			"INITIAL": {"USER": "WAIT_PASS"},
+			# USER 후 PASS 명령어로 인증 전이
+			"WAIT_PASS": {"PASS": "AUTHENTICATED"},
+			# 인증 후 상태에서 허용되는 명령어 전이 규칙
+			"AUTHENTICATED": {
+				# 디렉토리 및 파일 관리 명령어
+				"CWD": "AUTHENTICATED",
+				"MKD": "AUTHENTICATED",
+				"RMD": "AUTHENTICATED",
+				"DELE": "AUTHENTICATED",
+				# 파일 전송 명령어 (DATA_TRANSFER 상태로 전환)
+				"RETR": "DATA_TRANSFER",
+				"STOR": "DATA_TRANSFER",
+				# 파일 이름 변경 명령어 (WAIT_RNTO 상태로 전환)
+				"RNFR": "WAIT_RNTO",
+				# 세션 종료 및 상태 초기화
+				"QUIT": "INITIAL",
+				# 기타 명령어
+				"SITE": "AUTHENTICATED",
+				"STAT": "AUTHENTICATED",
+				"HELP": "AUTHENTICATED",
+			},
+			# 파일 이름 변경 대기 상태 (WAIT_RNTO)
+			"WAIT_RNTO": {
+				"RNTO": "AUTHENTICATED"  # 이름 변경 후 인증 상태로 복귀
+			},
+			# 데이터 전송 상태에서 허용되는 명령어
+			"DATA_TRANSFER": {
+				"ABOR": "AUTHENTICATED"  # 전송 중단 시 인증 상태로 복귀
+			},
+		}
+
+	def get_next_state(self, command: str) -> str:
+		return self.rules.get(self.state, {}).get(command, "INVALID")
+
+	def update_state(self, command: str) -> None:
+		next_state = self.get_next_state(command)
+		if next_state != "INVALID":
+			print(f"State changed: {self.state} -> {next_state}")
+			self.state = next_state
+		else:
+			print(f"Invalid state transition: {self.state} with command {command}")
 
 
 class FTP(Base):
@@ -21,34 +71,51 @@ class FTP(Base):
 			("DELE", "test.txt"),  # 파일 삭제
 			("RMD", "/tmp/test"),  # 디렉토리 삭제
 			("ABOR", None),  # 전송 중단
-			("ACCT", "user"),  # 사용자 계정 정보 제공
-			("ALLO", "1000"),  # 공간 할당
-			("APPE", "append.txt"),  # 파일 추가 모드 전송
-			("HELP", None),  # 명령어 도움말 표시
-			("LIST", None),  # 디렉토리 파일 목록 표시
-			("MODE", "S"),  # 전송 모드 설정
-			("NLST", None),  # 파일 이름 목록 반환
-			("NOOP", None),  # 아무 작업 수행 안 함
-			("PASV", None),  # 패시브 모드 전환
-			("PORT", "1234"),  # 데이터 전송 포트 설정
-			("QUIT", None),  # FTP 세션 종료
-			("REIN", None),  # 세션 재설정
-			("REST", "50"),  # 파일 전송 재시작 지점 설정
 			("RETR", "test.txt"),  # 파일 다운로드
 			("RNFR", "rename.txt"),  # 파일 이름 변경 (원본 이름)
 			("RNTO", "new_rename.txt"),  # 파일 이름 변경 (새 이름)
 			("SITE", "CHMOD 755 test.txt"),  # 사이트별 명령어 전달
-			("STAT", None),  # 서버 상태 정보
-			("STOR", "flag.txt"),  # 파일 업로드
-			("STRU", "F"),  # 파일 구조 설정
-			("TYPE", "A"),  # 전송 파일 유형 설정
+			("STOR", "upload_file.txt"),  # 파일 업로드
+			("QUIT", None),  # FTP 세션 종료
 		]
+		self.state = State()
+		self.radamsa = Radamsa()
 		self.update_commands_with_files()
 
-	def initialize(self, session) -> None:
+	def initialize(self, session: Session) -> None:
+		previous_request = None
+
+		# 초기 상태에서 USER 명령어 전송
 		for cmd, arg in self.command:
-			req = self.generate_packet(cmd, arg)
-			session.connect(session.root, req)
+			if self.state.state == "INITIAL" and cmd == "USER":
+				# pyradamsa를 사용하여 변형된 인자 생성
+				dynamic_arg = self.generate_radamsa_argument(arg)
+				req = self.generate_packet(cmd, dynamic_arg)
+				session.connect(session.root, req)
+				previous_request = req
+				self.state.update_state(cmd)
+				break
+
+		# 이후 상태 전이에 따른 명령어 연결
+		for cmd, arg in self.command:
+			if self.state.get_next_state(cmd) != "INVALID":
+				# pyradamsa를 사용하여 변형된 인자 생성
+				dynamic_arg = self.generate_radamsa_argument(arg)
+				req = self.generate_packet(cmd, dynamic_arg)
+				session.connect(previous_request, req)
+				self.state.update_state(cmd)
+				previous_request = req
+
+	def generate_radamsa_argument(self, base_value: Optional[str] = None) -> str:
+		"""
+		pyradamsa를 사용하여 변형된 인자 값을 생성.
+		"""
+		if base_value is None:
+			base_value = "default"
+
+		# pyradamsa를 통해 변형된 입력 값 생성
+		mutated_value = self.radamsa.fuzz(base_value.encode())
+		return mutated_value.decode("utf-8")  # 변형된 값을 문자열로 반환
 
 	def generate_packet(self, cmd: str, arg: Optional[str] = None) -> Request:
 		if arg is None:

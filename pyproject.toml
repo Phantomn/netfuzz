@@ -164,6 +164,7 @@ vermin = "^1.6.0"
 mkinit = "^1.1.0"
 monkeytype = "^23.3.0"
 pytest = "^8.3.2"
+pyradamsa = "^0.1.1"
 
 [tool.poetry.group.docs.dependencies]
 mdutils = "^1.6.0"
