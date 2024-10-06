@@ -1,6 +1,8 @@
 # Fuzzer 엔진 기능 정의
 from __future__ import annotations
 
+import json
+
 from boofuzz import (
 	FuzzLoggerCsv,
 	FuzzLoggerCurses,
@@ -28,6 +30,7 @@ class Engine:
 		protocol.initialize(session)
 
 		session.fuzz()
+		self.analyze_results(session)
 
 	def setup_session(self, kwargs):
 		connection = TCPSocketConnection(kwargs["target_host"], kwargs["target_port"])
@@ -98,3 +101,24 @@ class Engine:
 			fuzz_loggers.append(FuzzLoggerCsv(file_handle=f))
 
 		return fuzz_loggers
+
+	def analyze_results(self, session) -> None:
+		for test_case in session.test_case_list:
+			command = test_case.name
+			response = test_case.last_recv or "No response"
+			status = "FAILED" if self.is_failed_test(response) else "SUCCESS"
+
+			# Triage 결과 기록
+			self.triage_results(command, response, status)
+
+	def triage_results(self, command: str, response: str, status: str) -> None:
+		result = {"command": command, "response": response, "status": status}
+
+		print(json.dumps(result))
+
+	def is_failed_test(self, response: str) -> bool:
+		failure_keywords = ["error", "failed", "exception", "crash"]
+		for keyword in failure_keywords:
+			if keyword in response.lower():
+				return True
+		return False

