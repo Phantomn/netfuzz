@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import random
 from typing import Optional
 
 from boofuzz import Block, Delim, Request, Session, Static, String
@@ -106,16 +107,36 @@ class FTP(Base):
 				self.state.update_state(cmd)
 				previous_request = req
 
-	def generate_radamsa_argument(self, base_value: Optional[str] = None) -> str:
-		"""
-		pyradamsa를 사용하여 변형된 인자 값을 생성.
-		"""
+	def generate_radamsa_argument(
+		self, cmd: str, base_value: Optional[str], ratio: float, seed: Optional[int]
+	) -> str:
 		if base_value is None:
 			base_value = "default"
 
-		# pyradamsa를 통해 변형된 입력 값 생성
-		mutated_value = self.radamsa.fuzz(base_value.encode())
-		return mutated_value.decode("utf-8")  # 변형된 값을 문자열로 반환
+		radamsa_options = {"ratio": ratio}
+		if seed is not None:
+			radamsa_options["seed"] = seed
+
+		if cmd == "CWD":
+			mutated_value = self.radamsa.fuzz(
+				f"/tmp/../home/{random.randint(1, 100)}".encode(), **radamsa_options
+			)
+		elif cmd in ["RETR", "STOR"]:
+			mutated_value = self.radamsa.fuzz(
+				f"file_{random.randint(1, 100)}.txt".encode(), **radamsa_options
+			)
+		elif cmd == "SITE":
+			mutated_value = self.radamsa.fuzz(
+				f"CHMOD {random.randint(400, 755)}; ls -al".encode(), **radamsa_options
+			)
+		elif cmd in ["RNFR", "RNTO"]:
+			mutated_value = self.radamsa.fuzz(
+				f"rename_{random.randint(1, 100)}.txt".encode(), **radamsa_options
+			)
+		else:
+			mutated_value = self.radamsa.fuzz(base_value.encode(), **radamsa_options)
+
+		return mutated_value.decode("utf-8")
 
 	def generate_packet(self, cmd: str, arg: Optional[str] = None) -> Request:
 		if arg is None:
