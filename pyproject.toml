@@ -1,5 +1,5 @@
 [tool.ruff]
-line-length = 100
+line-length = 155
 indent-width = 4
 target-version = "py310"
 include = ["pyproject.toml", "netfuzz/**/*.py"]
@@ -165,6 +165,7 @@ mkinit = "^1.1.0"
 monkeytype = "^23.3.0"
 pytest = "^8.3.2"
 pyradamsa = "^0.1.1"
+scapy = "^2.6.0"
 
 [tool.poetry.group.docs.dependencies]
 mdutils = "^1.6.0"
